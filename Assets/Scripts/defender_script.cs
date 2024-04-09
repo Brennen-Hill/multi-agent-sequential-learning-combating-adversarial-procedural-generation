@@ -13,13 +13,23 @@ public class defender_script : MonoBehaviour
     public int life;
     private const int damage = 1;
     private const int heal_ammount = 1;
+    private const int max_energy = 10000;
+    private const int start_energy = 1000;
+
+    private const int energy_refill_rate = 10;
+
+    private int energy;
+
     public attacker_script attacker;
     System.Random random = new System.Random();
     // Start is called before the first frame update
     void Start()
     {
+        //Initialize variables
         x = random.Next(10);
         life = max_life;
+        energy = start_energy;
+
         update_graphic();
     }
 
@@ -27,6 +37,7 @@ public class defender_script : MonoBehaviour
     void Update()
     {
         take_action();
+        increase_energy();
         update_graphic();
     }
     
@@ -47,6 +58,9 @@ public class defender_script : MonoBehaviour
             case 3:
                 heal();
                 break;
+            case 4:
+                do_nothing();
+                break;
         }
     }
 
@@ -57,11 +71,13 @@ public class defender_script : MonoBehaviour
 
     //Decides on an action based on the passed information
     int get_action(int[] known_information) {
-        return random.Next(4);
+        return random.Next(5);
     }
 
     //Move to the square to the left if it is available
     void move_left() {
+        //Checks that the action is affordable; otherwise does nothing this tick
+        if(!check_energy(10)) return;
         print_action("move_left");
         x -= 1;
         x = Math.Max(0, x);
@@ -69,6 +85,9 @@ public class defender_script : MonoBehaviour
 
     //Move to the square to the right if it is available
     void move_right() {
+        //Checks that the action is affordable; otherwise does nothing this tick
+        if(!check_energy(10)) return;
+
         print_action("move_right");
         x += 1;
         x = Math.Min(x, 9);
@@ -76,6 +95,9 @@ public class defender_script : MonoBehaviour
 
     //Shoot the closest spawn in the same lane if one is there
     void shoot() {
+        //Checks that the action is affordable; otherwise does nothing this tick
+        if(!check_energy(50)) return;
+
         print_action("shoot");
         ArrayList spawns = attacker.spawns;
         spawn_script closest_spawn = null;
@@ -90,14 +112,40 @@ public class defender_script : MonoBehaviour
 
     //Recover health
     void heal() {
+        //Checks that the action is affordable; otherwise does nothing this tick
+        if(!check_energy(100)) return;
+
         print_action("heal");
         life += heal_ammount;
         life = Math.Min(life, max_life);
     }
 
+    //To assist in energy management, sometimes does nothing
+    void do_nothing() {
+        print_action("do_nothing");
+    }
+
+    //Determines if energy is high enough for the intended action
+    //Decrements energy if possible
+    bool check_energy(int cost) {
+        print("A: " + z + " | E: " + energy);
+        if(energy < cost) {
+            print_action("cannot_aford_action | Costs: " + cost + " of " + energy);
+            return false;
+        } else {
+            energy -= cost;
+            return true;
+        }
+    }
+
     //Update's the defender's visual representation
     void update_graphic() {
         transform.position = new Vector3(x, y, z);
+    }
+
+    //Increases the defender's action each tick
+    void increase_energy() {
+        energy = Math.Min(max_energy, energy + energy_refill_rate);
     }
 
     //Prints out an action in a formatted manner
