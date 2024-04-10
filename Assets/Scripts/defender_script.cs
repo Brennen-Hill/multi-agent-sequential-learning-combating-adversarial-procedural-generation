@@ -191,6 +191,13 @@ public class defender_script : MonoBehaviour
     [SerializeField]
     RoleAttributes.Role Role;
 
+    // set this to the bullet prefab asset
+    // (will be instantiated every time a bullet is shot)
+    [SerializeField]
+    private GameObject bulletPrefab;
+
+    private Transform bulletParent;
+
     //Store location in x,y,z
     public int x;
     private const int y = 0;
@@ -224,6 +231,13 @@ public class defender_script : MonoBehaviour
 
         // register this object with the GameTicker event
         GameTicker.instance.BoardTick.AddListener(OnBoardTick);
+
+        // set the bulletParent
+        bulletParent = GameObject.FindGameObjectWithTag("BulletParent").transform;
+        if(bulletParent == null) {
+            Debug.Log("couldn't find bulletParent (tag an object with \"BulletParent\" tag)");
+            bulletParent = transform;
+        }
     }
 
     // Will be called once every tick/turn
@@ -302,8 +316,35 @@ public class defender_script : MonoBehaviour
                 closest_spawn = spawn;
             }
         }
-        if(closest_spawn != null)
+        if(closest_spawn != null) {
             closest_spawn.take_damage(damage, spawns, roleAttributes.physical_penetration, roleAttributes.magic_penetration, roleAttributes.damage_type);
+            doBulletAnimation(closest_spawn);
+        }
+    }
+
+    // do the aesthetic part of the bullet firing, i.e. play the animation
+    private void doBulletAnimation(spawn_script spawn) {
+        Debug.Log("pew! pew!");
+        // figure out the trajectory of the bullet
+        Vector3 start = new Vector3(x, y, z);
+
+        
+        Vector3 end;
+        // if the bullet does 
+        if(spawn != null) {
+            // bullet should end on impact
+            end = spawn.transform.position;
+        }
+        else {
+            // if the bullet does not reach its target, it will despawn after an arbitrary number of units
+            end = start + (130 * Vector3.forward);
+        }
+
+        // create a new instance of prefab
+        GameObject newBullet = Instantiate(bulletPrefab, bulletParent);
+        Bullet animator = newBullet.GetComponent<Bullet>();
+
+        animator.configureBulletAnimation(start, end);
     }
 
     public void HealWithoutEnergy(int amount)

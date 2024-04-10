@@ -14,7 +14,8 @@ public class GameTicker : MonoBehaviour
     public static GameTicker instance;
 
     // constant gives us the rate at which ticks are fired out
-    const float SECONDS_PER_AUTOTICK = 0.5f;
+    [SerializeField]
+    private float SECONDS_PER_AUTOTICK = 0.7f;
 
     // We will be able to pause the ticks if this variable is false
     [SerializeField]
