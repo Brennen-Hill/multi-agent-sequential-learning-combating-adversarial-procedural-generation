@@ -17,6 +17,11 @@ public class defender_script : MonoBehaviour
     private const int start_energy = 1000;
 
     private const int energy_refill_rate = 10;
+    private const int physical_defense = 0;
+    private const int magic_defense = 0;
+    private const int physical_penetration = 0;
+    private const int magic_penetration = 0;
+    private const string damage_type = "physical";
 
     private int energy;
 
@@ -107,7 +112,7 @@ public class defender_script : MonoBehaviour
             }
         }
         if(closest_spawn != null)
-            closest_spawn.take_damage(damage, spawns);
+            closest_spawn.take_damage(damage, spawns, physical_penetration, magic_penetration, damage_type);
     }
 
     //Recover health
@@ -153,10 +158,28 @@ public class defender_script : MonoBehaviour
         //print("Unit: Defender " + z + " || Action: " + action);  
     }
 
-    //Take damage dealt by a spawn, and accept defeat if life is reduced to 0
-    public void take_damage(int damage_dealt) {
+    /* Take damage dealt by a spawn, and accept defeat if life is reduced to 0
+    ** damage_dealt: the original damage dealt by a defender
+    ** spawns: the list of spawns, which this spawn may be removing itself from
+    ** physical_penetration: the ammount of physical_defense that is ignored by the attack
+    ** magic_penetration: the ammount of magic_defense that is ignored by the attack
+    ** damage_type: the type of damage, either physical or magic, which corresponds to defense and penetration values
+    */
+    public void take_damage(int damage_dealt, int physical_penetration, int magic_penetration, string damage_type) {
         int old_life = life;
-        life -= damage_dealt;
+        int total_damage = damage_dealt;
+
+        //decrease damage by any defense of the damage type, after reducing defense by penetration
+        int total_physical_penetration = Math.Max(0, physical_penetration - physical_defense);
+        int total_magic_penetration = Math.Max(0, magic_penetration - magic_defense);
+        if(damage_type == "physical") {
+            total_damage = Math.Max(0, total_damage - total_physical_penetration);
+        } else if(damage_type == "magical") {
+            total_damage = Math.Max(0, total_damage - total_magic_penetration);
+        }
+
+        //Reduce life by the calculated damage
+        life -= total_damage;
         if(life <= 0 && old_life > 0) {
             print("GAME OVER, DEFEATED DEFENDER");
         }

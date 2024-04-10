@@ -64,9 +64,28 @@ public class attacker_script : MonoBehaviour
         int min_damage = 1;
         int max_damage = 5;
         int min_life = 1;
-        int max_life = 5;        
+        int max_life = 5;
+        int min_regen = 0;
+        int max_regen = 5;
+        int min_leach = 0;
+        int max_leach = 5;
+        int min_physical_defense = 0;
+        int max_physical_defense = 5;
+        int min_magic_defense = 0;
+        int max_magic_defense = 5;
+        int min_physical_penetration = 0;
+        int max_physical_penetration = 5;
+        int min_magic_penetration = 0;
+        int max_magic_penetration = 5;
+        int min_damage_type = 0;
+        int max_damage_type = 1;
         return new int[] {choice, random.Next(min_x, max_x), random.Next(min_speed, max_speed),
-                random.Next(min_range, max_range), random.Next(min_damage, max_damage), random.Next(min_life, max_life)};
+            random.Next(min_range, max_range), random.Next(min_damage, max_damage), random.Next(min_life, max_life),
+            random.Next(min_regen, max_regen), random.Next(min_leach, max_leach),
+            random.Next(min_physical_defense, max_physical_defense), random.Next(min_magic_defense, max_magic_defense),
+            random.Next(min_physical_penetration, max_physical_penetration), random.Next(min_magic_penetration, max_magic_penetration),
+            random.Next(min_damage_type, max_damage_type)
+        };
     }
 
     //To assist in energy management, sometimes does nothing
@@ -82,17 +101,41 @@ public class attacker_script : MonoBehaviour
         int range = spawn_data[2];
         int damage = spawn_data[3];
         int life = spawn_data[4];
+        int regen = spawn_data[5];
+        int leach = spawn_data[6];
+        int physical_defense = spawn_data[7];
+        int magic_defense = spawn_data[8];
+        int physical_penetration = spawn_data[9];
+        int magic_penetration = spawn_data[10];
+        int damage_type = spawn_data[11];
+        string damage_type_description = damage_type == 0 ? "physical" : "magic";
+
+        //Used to increase cost of actions, rather than decreasing maximum energy,to ensure energy costs are integers
+        int cost_multiplier = 2;
         
         //Calculate cost of the action
-        //Ratios currently are set to 1.0 and have no effect, but can be modified to weight curtain rates as mattering
-            //more than others
+            //Ratios set to 1.0 have no effect
+            //Ratios not set to 1 modify weight of certain rates to matter more than others
+            //Some values are incremented by 1 because they may have 0 as a value
         double speed_ratio = 1.0; double range_ratio = 1.0; double damage_ratio = 1.0; double life_ratio = 1.0;
+        double leach_ratio = 1.0; double physical_defense_ratio = 3.5; double magic_defense_ratio = 4.5;
+        double regen_ratio = 2.0; double physical_penetration_ratio = 2.0; double magic_penetration_ratio = 2.5;
+        double damage_type_ratio = 3.0;
+
         int cost = (int) Math.Ceiling(
             Math.Pow(speed, speed_ratio) *
             Math.Pow(range, range_ratio) *
             Math.Pow(damage, damage_ratio) *
-            Math.Pow(life, life_ratio)
-        ) * 3;
+            Math.Pow(life, life_ratio) * 
+            Math.Pow(regen + 1, regen_ratio) * 
+            Math.Pow(leach, leach_ratio + 1) * 
+            Math.Pow(physical_defense + 1, physical_defense_ratio) * 
+            Math.Pow(magic_defense + 1, magic_defense_ratio) *
+            Math.Pow(physical_penetration + 1, physical_penetration_ratio) *
+            Math.Pow(magic_penetration + 1, magic_penetration_ratio) *
+            Math.Pow(damage_type + 1, damage_type_ratio) *
+            cost_multiplier
+        );
 
         //If the cost of the action is greater than the currrent energy, do nothing
         if(cost > energy) {
@@ -101,12 +144,16 @@ public class attacker_script : MonoBehaviour
         }
         energy -= cost;
 
+        //Initialize the new spawn
         GameObject spawn_instance = Instantiate(Unborn_Spawn);
         spawn_script spawn_code = spawn_instance.GetComponent<spawn_script>();
-        spawn_code.initialize(x, speed, range, damage, life);
+        spawn_code.initialize(x, speed, range, damage, life, regen, leach, physical_defense, magic_defense,
+            physical_penetration, magic_penetration, damage_type_description);
         spawns.Add(spawn_code);
     }
 
+
+    //Increases the spawn's energy each tick
     void increase_energy() {
         energy = Math.Min(max_energy, energy + energy_refill_rate);
         max_energy += max_energy_rate;
