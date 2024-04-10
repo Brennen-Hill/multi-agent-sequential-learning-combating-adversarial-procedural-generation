@@ -5,6 +5,85 @@ using System;
 
 public class defender_script : MonoBehaviour
 {
+
+    class RoleAttributes
+    {
+        public enum Role
+        {
+            Mage, Healer, Tank, SharpShooter
+        }
+        Role role;
+
+        public int physical_defence { get; }
+        public int magic_defence { get; }
+        public int physical_penetration { get; }
+        public int magic_penetration { get; }
+
+        public int damage { get; }
+        public int heal_amount { get; }
+        Action[] allowedActions { get; }
+        public string damage_type { get; }
+        RoleAction roleAction;
+        public Color meshColor;
+
+        public RoleAttributes(Role role)
+        {
+            this.role = role;
+            (int, int, int, int, int, int, string, RoleAction, Color) attrs = this.role switch
+            {
+                Role.Mage =>            (0,  10, 0,  20, 10, 30, "magical", DebuffEnemies, Color.blue),
+                Role.Healer =>          (0,  5,  0,  10, 8,  75, "magical", TotalPartyHeal, Color.green),
+                Role.Tank =>            (25, 0,  5,  2,  5,  5,  "physical", Cannon, Color.black),
+                Role.SharpShooter =>    (15, 0,  20, 0,  10, 5,  "physical", ClearLane, Color.red),
+                _ =>                    (-1, -1, -1, -1, -1, -1, "", NoRoleAction, Color.grey),
+            };
+            this.physical_defence = attrs.Item1;
+            this.magic_defence = attrs.Item2;
+            this.physical_penetration = attrs.Item3;
+            this.magic_penetration = attrs.Item4;
+            this.damage = attrs.Item5;
+            this.heal_amount = attrs.Item6;
+            this.damage_type = attrs.Item7;
+            this.roleAction = attrs.Item8;
+            this.meshColor = attrs.Item9;
+        }
+
+        void NoRoleAction(defender_script _) { }
+
+        void Cannon(defender_script defenderView)
+        {
+
+        }
+
+        void TotalPartyHeal(defender_script defenderView)
+        {
+
+        }
+
+        void ClearLane(defender_script defenderView)
+        {
+
+        }
+
+        void DebuffEnemies(defender_script defenderView)
+        {
+
+        }
+
+        // Cannon,
+        // T.P. Heal
+        // Headshot
+        // Remove Armor
+
+    }
+
+    delegate void RoleAction(defender_script defenderView);
+
+    private RoleAttributes roleAttributes;
+
+    [SerializeField]
+    RoleAttributes.Role Role;
+
     //Store location in x,y,z
     public int x;
     private const int y = 0;
@@ -12,16 +91,10 @@ public class defender_script : MonoBehaviour
     private const int max_life = 100;
     public int life;
     private const int damage = 1;
-    private const int heal_ammount = 1;
     private const int max_energy = 10000;
     private const int start_energy = 1000;
 
     private const int energy_refill_rate = 10;
-    private const int physical_defense = 0;
-    private const int magic_defense = 0;
-    private const int physical_penetration = 0;
-    private const int magic_penetration = 0;
-    private const string damage_type = "physical";
 
     private int energy;
 
@@ -30,6 +103,10 @@ public class defender_script : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        roleAttributes = new RoleAttributes(this.Role);
+
+        GetComponent<Renderer>().material.SetColor("_Color", roleAttributes.meshColor);
+
         //Initialize variables
         x = random.Next(10);
         life = max_life;
@@ -112,7 +189,7 @@ public class defender_script : MonoBehaviour
             }
         }
         if(closest_spawn != null)
-            closest_spawn.take_damage(damage, spawns, physical_penetration, magic_penetration, damage_type);
+            closest_spawn.take_damage(damage, spawns, roleAttributes.physical_penetration, roleAttributes.magic_penetration, roleAttributes.damage_type);
     }
 
     //Recover health
@@ -121,7 +198,7 @@ public class defender_script : MonoBehaviour
         if(!check_energy(100)) return;
 
         print_action("heal");
-        life += heal_ammount;
+        life += roleAttributes.heal_amount;
         life = Math.Min(life, max_life);
     }
 
@@ -146,6 +223,7 @@ public class defender_script : MonoBehaviour
     //Update's the defender's visual representation
     void update_graphic() {
         transform.position = new Vector3(x, y, z);
+
     }
 
     //Increases the defender's action each tick
@@ -170,8 +248,8 @@ public class defender_script : MonoBehaviour
         int total_damage = damage_dealt;
 
         //decrease damage by any defense of the damage type, after reducing defense by penetration
-        int total_physical_penetration = Math.Max(0, physical_penetration - physical_defense);
-        int total_magic_penetration = Math.Max(0, magic_penetration - magic_defense);
+        int total_physical_penetration = Math.Max(0, physical_penetration - roleAttributes.physical_defence);
+        int total_magic_penetration = Math.Max(0, magic_penetration - roleAttributes.magic_defence);
         if(damage_type == "physical") {
             total_damage = Math.Max(0, total_damage - total_physical_penetration);
         } else if(damage_type == "magical") {
