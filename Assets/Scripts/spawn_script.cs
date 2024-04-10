@@ -35,10 +35,14 @@ public class spawn_script : MonoBehaviour
     void Start()
     {
         collect_defenders();        
+        update_graphic();
+
+        // register this object with the GameTicker event
+        GameTicker.instance.BoardTick.AddListener(OnBoardTick);
     }
 
-    // Update is called once per frame
-    void Update()
+    // Will be called once every tick/turn
+    void OnBoardTick()
     {
         move_and_attack();
         regenerate();

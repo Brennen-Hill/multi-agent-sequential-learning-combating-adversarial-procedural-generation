@@ -195,6 +195,7 @@ public class defender_script : MonoBehaviour
     public int x;
     private const int y = 0;
     public int z;
+
     private const int max_life = 100;
     public int life;
     private const int damage = 1;
@@ -220,10 +221,13 @@ public class defender_script : MonoBehaviour
         energy = start_energy;
 
         update_graphic();
+
+        // register this object with the GameTicker event
+        GameTicker.instance.BoardTick.AddListener(OnBoardTick);
     }
 
-    // Update is called once per frame
-    void Update()
+    // Will be called once every tick/turn
+    void OnBoardTick()
     {
         take_action();
         increase_energy();
