@@ -9,15 +9,15 @@ public class attacker_script : MonoBehaviour
     private System.Random random = new System.Random();
     public GameObject Unborn_Spawn;
     public ArrayList spawns = new ArrayList();
-    // Start is called before the first frame update
-    void Start()
-    {
-        //Reduces the framerate to make visualization easier
-        Application.targetFrameRate = 2;
+
+    // called before the first frame update
+    void Start() {
+        // register this object with the GameTicker event
+        GameTicker.instance.BoardTick.AddListener(OnBoardTick);
     }
 
-    // Update is called once per frame
-    void Update()
+    // Will be called once every game tick/turn
+    void OnBoardTick()
     {
         int[] known_information = get_known_information();
         int[] action = get_action(known_information);
