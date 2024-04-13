@@ -2,8 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Unity.MLAgents;
+using Unity.MLAgents.Actuators;
+using Unity.MLAgents.Sensors;
 
-public class defender_script : MonoBehaviour
+public class defender_agent : Agent
 {
     //Store location in x,y,z
     public int x;
@@ -13,6 +16,7 @@ public class defender_script : MonoBehaviour
     public int life;
     private const int damage = 1;
     private const int heal_ammount = 1;
+    public int pos;
     public attacker_script attacker;
     System.Random random = new System.Random();
     // Start is called before the first frame update
@@ -20,20 +24,26 @@ public class defender_script : MonoBehaviour
     {
         x = random.Next(10);
         life = max_life;
-        update_graphic();
+        // update_graphic();
     }
 
+    public override void OnEpisodeBegin()
+    {
+        x = 0;
+        life = max_life;
+    }
     // Update is called once per frame
     void Update()
     {
-        take_action();
-        update_graphic();
+        pos = ((int)this.transform.position.x);
+        // take_action();
+        // update_graphic();
     }
     
     //Calculate an action based on the defender's known information and take that action
-    void take_action() {
-        int[] known_information = get_known_information();
-        int action = get_action(known_information);
+    void take_action(int action) {
+        // int[] known_information = get_known_information();
+        // int action = get_action(known_information);
         switch(action) {
             case 0:
                 move_left();
@@ -114,4 +124,22 @@ public class defender_script : MonoBehaviour
         }
     }
 
+    public override void CollectObservations(VectorSensor sensor)
+    {
+        sensor.AddObservation(pos);
+        // base.CollectObservations(sensor);
+    }
+
+    public override void OnActionReceived(ActionBuffers actions)
+    {
+        Debug.Log("OnActionReceived" + actions.DiscreteActions[0]);
+        take_action(actions.DiscreteActions[0]);
+        update_graphic();
+    }
+
+    public void game_over() {
+        print("Reward");
+        SetReward(-1.0f);
+        EndEpisode();
+    }
 }
