@@ -23,7 +23,7 @@ public class defender_script : MonoBehaviour
         public int heal_amount { get; }
         Action[] allowedActions { get; }
         public string damage_type { get; }
-        RoleAction roleAction;
+        public RoleAction roleAction;
         public Color meshColor;
 
         public RoleAttributes(Role role)
@@ -48,36 +48,143 @@ public class defender_script : MonoBehaviour
             this.meshColor = attrs.Item9;
         }
 
-        void NoRoleAction(defender_script _) { }
+        bool NoRoleAction(defender_script _) { throw new Exception("Should not be called"); }
 
-        void Cannon(defender_script defenderView)
+        bool Cannon(defender_script defender)
         {
+            if (!defender.check_energy(40))
+            {
+                return false;
+            }
 
+            ArrayList enemies = defender.attacker.spawns;
+
+            // assumes board to be x=10*z=30
+            int lowX = 2; Debug.Assert(lowX % 2 == 0);
+            int highX = 8; Debug.Assert(highX % 2 == 0);
+            int lowZ = 6; Debug.Assert(lowZ % 2 == 0);
+            int highZ = 28; Debug.Assert(highZ % 2 == 0);
+
+            // all possible points are (even x, even y)
+            // current size is 4*10 => 40 checks.
+
+            var enemiesAtEachPoint = new Dictionary<(int, int), ArrayList>();
+            for (int x = lowX; x <= highX; x += 2)
+                for (int y = lowZ; y <= highZ; y += 2)
+                    enemiesAtEachPoint[(x, y)] = new ArrayList();
+
+            foreach (spawn_script enemy in enemies) {
+                int eX = enemy.x;
+                int eZ = enemy.z;
+                int[] all_x = { -1, -1 };
+                int[] all_z = { -1, -1 };
+                if (eX % 2 == 0) all_x[0] = eX;
+                else
+                {
+                    all_x[0] = eX - 1;
+                    all_x[1] = eX + 1;
+                }
+
+                if (eZ % 2 == 0) all_z[0] = eZ;
+                else
+                {
+                    all_z[0] = eZ - 1;
+                    all_z[1] = eZ + 1;
+                }
+
+                foreach(int x in all_x) {
+                    if (x == -1) continue;
+                    foreach(int z in all_z)
+                    {
+                        if (z == -1) continue;
+                        if (!enemiesAtEachPoint.ContainsKey((x, z))) continue;
+                        enemiesAtEachPoint[(x, z)].Add(enemy);
+                    }
+                }
+            }
+
+            int mostEnemies = -1;
+            (int, int) pos = (-1, -1);
+            foreach(KeyValuePair<(int, int), ArrayList> entry in enemiesAtEachPoint)
+            {
+                if (entry.Value.Count > mostEnemies)
+                {
+                    mostEnemies = entry.Value.Count;
+                    pos = entry.Key;
+                }
+            }
+
+            ArrayList newSpawns = new ArrayList(enemies);
+            foreach(spawn_script enemy in enemiesAtEachPoint[pos])
+            {
+                enemy.take_damage(200, newSpawns, 100, 0, "physical");
+            }
+            defender.attacker.spawns = newSpawns;
+            print("cannon at " + pos.Item1 + "," + pos.Item2 + " hit " + enemiesAtEachPoint[pos].Count + " enemies");
+
+            return true;
         }
 
-        void TotalPartyHeal(defender_script defenderView)
+        bool TotalPartyHeal(defender_script defender)
         {
-
+            if (!defender.check_energy(40))
+            {
+                return false;
+            }
+            defender_script[] allDefenders = FindObjectsByType<defender_script>(FindObjectsSortMode.InstanceID);
+            String before = "";
+            String after = "";
+            foreach(var d in allDefenders)
+            {
+                before += d.life + " ";
+                d.HealWithoutEnergy(30);
+                after += d.life + " ";
+            }
+            print("healed all party members. Before: " + before + " After: " + after);
+            return true;
         }
 
-        void ClearLane(defender_script defenderView)
+        bool  ClearLane(defender_script defender)
         {
+            if (!defender.check_energy(40))
+            {
+                return false;
+            }
 
+            ArrayList spawns = new ArrayList(defender.attacker.spawns);
+
+            int n = 0;
+            foreach(spawn_script enemy in defender.attacker.spawns)
+            {
+                if (enemy.x == defender.x)
+                {
+                    enemy.take_damage(50, spawns, 100, 0, "physical");
+                    n += 1;
+                }
+            }
+            defender.attacker.spawns = spawns;
+            print("clearing lane " + defender.x + " and hit " + n + " enemies");
+
+            return true;
         }
 
-        void DebuffEnemies(defender_script defenderView)
+        bool DebuffEnemies(defender_script defender)
         {
+            if (!defender.check_energy(40))
+            {
+                return false;
+            }
 
+            foreach(spawn_script enemy in defender.attacker.spawns)
+            {
+                enemy.removeDefences();
+            }
+            print("debuffed all enemies");
+            return true;
         }
-
-        // Cannon,
-        // T.P. Heal
-        // Headshot
-        // Remove Armor
-
     }
 
-    delegate void RoleAction(defender_script defenderView);
+    delegate bool RoleAction(defender_script defenderView);
 
     private RoleAttributes roleAttributes;
 
@@ -141,6 +248,9 @@ public class defender_script : MonoBehaviour
                 heal();
                 break;
             case 4:
+                roleAttributes.roleAction(this);
+                break;
+            case 5:
                 do_nothing();
                 break;
         }
@@ -153,7 +263,7 @@ public class defender_script : MonoBehaviour
 
     //Decides on an action based on the passed information
     int get_action(int[] known_information) {
-        return random.Next(5);
+        return random.Next(6);
     }
 
     //Move to the square to the left if it is available
@@ -192,14 +302,19 @@ public class defender_script : MonoBehaviour
             closest_spawn.take_damage(damage, spawns, roleAttributes.physical_penetration, roleAttributes.magic_penetration, roleAttributes.damage_type);
     }
 
+    public void HealWithoutEnergy(int amount)
+    {
+        life += roleAttributes.heal_amount;
+        life = Math.Min(life, max_life);
+    }
+
     //Recover health
     void heal() {
         //Checks that the action is affordable; otherwise does nothing this tick
         if(!check_energy(100)) return;
 
         print_action("heal");
-        life += roleAttributes.heal_amount;
-        life = Math.Min(life, max_life);
+        HealWithoutEnergy(roleAttributes.heal_amount);
     }
 
     //To assist in energy management, sometimes does nothing
@@ -210,7 +325,7 @@ public class defender_script : MonoBehaviour
     //Determines if energy is high enough for the intended action
     //Decrements energy if possible
     bool check_energy(int cost) {
-        print("A: " + z + " | E: " + energy);
+        //print("A: " + z + " | E: " + energy);
         if(energy < cost) {
             print_action("cannot_aford_action | Costs: " + cost + " of " + energy);
             return false;

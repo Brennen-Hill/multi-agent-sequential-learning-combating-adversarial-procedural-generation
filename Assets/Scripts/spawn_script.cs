@@ -22,6 +22,12 @@ public class spawn_script : MonoBehaviour
     private string damage_type;
     public TextMesh header;
 
+    public void removeDefences()
+    {
+        this.physical_defense = 0;
+        this.magic_defense = 0;
+    }
+
     private defender_script[] defenders;
 
 
