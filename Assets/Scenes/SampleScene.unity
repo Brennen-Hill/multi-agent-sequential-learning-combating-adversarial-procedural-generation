@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028353, g: 0.22571383, b: 0.30692253, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -20777,6 +20777,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3769326597383364910, guid: 6b39927490b190247bdc68ad23496166, type: 3}
+      propertyPath: Role
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769326597383364910, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: attacker
       value: 
       objectReference: {fileID: 1729620572}
@@ -21785,6 +21789,10 @@ PrefabInstance:
     - target: {fileID: 3769326597383364910, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769326597383364910, guid: 6b39927490b190247bdc68ad23496166, type: 3}
+      propertyPath: Role
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3769326597383364910, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: attacker
@@ -28900,6 +28908,10 @@ PrefabInstance:
     - target: {fileID: 3769326597383364910, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: z
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769326597383364910, guid: 6b39927490b190247bdc68ad23496166, type: 3}
+      propertyPath: Role
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3769326597383364910, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: attacker
