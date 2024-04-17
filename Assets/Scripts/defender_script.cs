@@ -110,7 +110,6 @@ public class defender_script : MonoBehaviour
 
     // do the aesthetic part of the bullet firing, i.e. play the animation
     private void doBulletAnimation(spawn_script spawn) {
-        Debug.Log("pew! pew!");
         // figure out the trajectory of the bullet
         Vector3 start = new Vector3(x, y, z);
 
