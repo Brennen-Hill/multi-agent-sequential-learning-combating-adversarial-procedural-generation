@@ -20,6 +20,7 @@ public class spawn_script : MonoBehaviour
     private int physical_penetration;
     private int magic_penetration;
     private string damage_type;
+    public TextMesh header;
 
     private defender_script[] defenders;
 
@@ -28,7 +29,6 @@ public class spawn_script : MonoBehaviour
     void Start()
     {
         collect_defenders();        
-        update_graphic();
     }
 
     // Update is called once per frame
@@ -37,6 +37,7 @@ public class spawn_script : MonoBehaviour
         move_and_attack();
         regenerate();
         update_graphic();
+        set_header();
     }
 
     //Update's the spawn's visual representation
@@ -59,10 +60,19 @@ public class spawn_script : MonoBehaviour
         this.magic_defense = magic_defense;
         this.physical_defense = physical_defense;
         this.magic_defense = magic_defense;
-        this.damage_type = damage_type;
         this.physical_penetration = physical_penetration;
         this.magic_penetration = magic_penetration;
         this.damage_type = damage_type;
+
+        update_graphic();
+        set_header();
+    }
+
+    private void set_header() {
+        header.text =
+        "max_life: " + max_life + " | life: " + life + " | damage: " + damage + " | x: " + x + " | z: " + z + " | speed: " + speed + " | range: " + range + "\n" +
+        "regen: " + regen + " | leach: " + leach + " | physical_defense: " + physical_defense + " | magic_defense: " + magic_defense + "\n" +
+        "damage_type: " + damage_type + " | physical_penetration: " + physical_penetration + " | magic_penetration: " + magic_penetration;
     }
 
     //Collect the defenders into a set of references for tracking
