@@ -306,7 +306,7 @@ public class defender_script : MonoBehaviour
     //Shoot the closest spawn in the same lane if one is there
     void shoot() {
         //Checks that the action is affordable; otherwise does nothing this tick
-        if(!check_energy(50)) return;
+        if(!check_energy(2)) return;
 
         print_action("shoot");
         ArrayList spawns = attacker.spawns;
@@ -317,8 +317,8 @@ public class defender_script : MonoBehaviour
             }
         }
         if(closest_spawn != null) {
-            closest_spawn.take_damage(damage, spawns, roleAttributes.physical_penetration, roleAttributes.magic_penetration, roleAttributes.damage_type);
             doBulletAnimation(closest_spawn);
+            closest_spawn.take_damage(damage, spawns, roleAttributes.physical_penetration, roleAttributes.magic_penetration, roleAttributes.damage_type);
         }
     }
 
