@@ -18,6 +18,7 @@ public class defender_agent : Agent
     private const int heal_ammount = 1;
     public int pos;
     public attacker_script attacker;
+    public ArrayList spawn_positions = new ArrayList();
     System.Random random = new System.Random();
     // Start is called before the first frame update
     void Start()
@@ -127,12 +128,17 @@ public class defender_agent : Agent
     public override void CollectObservations(VectorSensor sensor)
     {
         sensor.AddObservation(pos);
+        foreach (Vector3 spawn_pos in spawn_positions) {
+            sensor.AddObservation(spawn_pos.x);
+            sensor.AddObservation(spawn_pos.y);
+            sensor.AddObservation(spawn_pos.z);
+        }
         // base.CollectObservations(sensor);
     }
 
     public override void OnActionReceived(ActionBuffers actions)
     {
-        Debug.Log("OnActionReceived" + actions.DiscreteActions[0]);
+        // Debug.Log("OnActionReceived" + actions.DiscreteActions[0]);
         take_action(actions.DiscreteActions[0]);
         update_graphic();
     }

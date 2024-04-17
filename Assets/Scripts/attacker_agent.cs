@@ -78,7 +78,7 @@ public class attacker_agent : MonoBehaviour
 
     public bool check_game_over(){
         foreach(spawn_script spawn in spawns) {
-            if(spawn.z == 0) {
+            if(spawn.z <= 0) {
                 return true;
             }
         }
@@ -90,6 +90,6 @@ public class attacker_agent : MonoBehaviour
             Destroy(spawn.gameObject);
         }
         spawns.Clear();
-        
+
     }
 }

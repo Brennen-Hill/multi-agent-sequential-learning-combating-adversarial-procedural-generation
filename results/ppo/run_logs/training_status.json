@@ -2,22 +2,22 @@
     "defender_1": {
         "checkpoints": [
             {
-                "steps": 332,
-                "file_path": "results\\ppo\\defender_1\\defender_1-332.onnx",
-                "reward": 0.0,
-                "creation_time": 1712996896.2239108,
+                "steps": 579,
+                "file_path": "results\\ppo\\defender_1\\defender_1-579.onnx",
+                "reward": -0.01718213058419244,
+                "creation_time": 1713372219.577806,
                 "auxillary_file_paths": [
-                    "results\\ppo\\defender_1\\defender_1-332.pt"
+                    "results\\ppo\\defender_1\\defender_1-579.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 332,
+            "steps": 579,
             "file_path": "results\\ppo\\defender_1.onnx",
-            "reward": 0.0,
-            "creation_time": 1712996896.2239108,
+            "reward": -0.01718213058419244,
+            "creation_time": 1713372219.577806,
             "auxillary_file_paths": [
-                "results\\ppo\\defender_1\\defender_1-332.pt"
+                "results\\ppo\\defender_1\\defender_1-579.pt"
             ]
         }
     },

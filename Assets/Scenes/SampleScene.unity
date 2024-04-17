@@ -2538,6 +2538,62 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 140980397}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &163791148 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7192765395554730985, guid: 6b39927490b190247bdc68ad23496166, type: 3}
+  m_PrefabInstance: {fileID: 1825106570}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &163791154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163791148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5574f282ffc2fff48ad33f22deed332c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
+  x: 0
+  z: 0
+  life: 0
+  pos: 0
+  attacker: {fileID: 0}
+--- !u!114 &163791155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163791148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d1c4e0b1822b495aa52bc52839ecb30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BrainParameters:
+    VectorObservationSize: 1
+    NumStackedVectorObservations: 1
+    m_ActionSpec:
+      m_NumContinuousActions: 0
+      BranchSizes: 01000000
+    VectorActionSize: 01000000
+    VectorActionDescriptions: []
+    VectorActionSpaceType: 0
+    hasUpgradedBrainParametersWithActionSpec: 1
+  m_Model: {fileID: 5022602860645237092, guid: 5b63657848d1e5348a2bd13789e3830a, type: 3}
+  m_InferenceDevice: 0
+  m_BehaviorType: 2
+  m_BehaviorName: My Behavior
+  TeamId: 0
+  m_UseChildSensors: 1
+  m_UseChildActuators: 1
+  m_ObservableAttributeHandling: 0
 --- !u!1 &174482099
 GameObject:
   m_ObjectHideFlags: 0
@@ -4763,6 +4819,10 @@ PrefabInstance:
       propertyPath: attacker
       value: 
       objectReference: {fileID: 1729620572}
+    - target: {fileID: 3769326597383364910, guid: 6b39927490b190247bdc68ad23496166, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7192765395554730985, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_Name
       value: defender_2
@@ -4810,7 +4870,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7192765395554730985, guid: 6b39927490b190247bdc68ad23496166, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1136231600}
+    - targetCorrespondingSourceObject: {fileID: 7192765395554730985, guid: 6b39927490b190247bdc68ad23496166, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1136231599}
   m_SourcePrefab: {fileID: 100100000, guid: 6b39927490b190247bdc68ad23496166, type: 3}
 --- !u!1 &258290164
 GameObject:
@@ -13791,7 +13857,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
+  MaxStep: 10
   x: 0
   z: 0
   life: 0
@@ -13810,8 +13876,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 1
-    NumStackedVectorObservations: 1
+    VectorObservationSize: 30
+    NumStackedVectorObservations: 30
     m_ActionSpec:
       m_NumContinuousActions: 0
       BranchSizes: 04000000
@@ -13821,7 +13887,7 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
-  m_BehaviorType: 2
+  m_BehaviorType: 0
   m_BehaviorName: defender_1
   TeamId: 0
   m_UseChildSensors: 1
@@ -15087,6 +15153,62 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 828818491}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &836222137 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7192765395554730985, guid: 6b39927490b190247bdc68ad23496166, type: 3}
+  m_PrefabInstance: {fileID: 1201520254}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &836222143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 836222137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5574f282ffc2fff48ad33f22deed332c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
+  x: 0
+  z: 0
+  life: 0
+  pos: 0
+  attacker: {fileID: 0}
+--- !u!114 &836222144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 836222137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d1c4e0b1822b495aa52bc52839ecb30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BrainParameters:
+    VectorObservationSize: 1
+    NumStackedVectorObservations: 1
+    m_ActionSpec:
+      m_NumContinuousActions: 0
+      BranchSizes: 01000000
+    VectorActionSize: 01000000
+    VectorActionDescriptions: []
+    VectorActionSpaceType: 0
+    hasUpgradedBrainParametersWithActionSpec: 1
+  m_Model: {fileID: 5022602860645237092, guid: 5b63657848d1e5348a2bd13789e3830a, type: 3}
+  m_InferenceDevice: 0
+  m_BehaviorType: 2
+  m_BehaviorName: My Behavior
+  TeamId: 0
+  m_UseChildSensors: 1
+  m_UseChildActuators: 1
+  m_ObservableAttributeHandling: 0
 --- !u!1 &836381584
 GameObject:
   m_ObjectHideFlags: 0
@@ -19484,6 +19606,62 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1135697380}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1136231593 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7192765395554730985, guid: 6b39927490b190247bdc68ad23496166, type: 3}
+  m_PrefabInstance: {fileID: 254270799}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1136231599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1136231593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5574f282ffc2fff48ad33f22deed332c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
+  x: 0
+  z: 0
+  life: 0
+  pos: 0
+  attacker: {fileID: 7227706924430544943, guid: 774c045fd7ea503429b93d4211047712, type: 3}
+--- !u!114 &1136231600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1136231593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d1c4e0b1822b495aa52bc52839ecb30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BrainParameters:
+    VectorObservationSize: 1
+    NumStackedVectorObservations: 1
+    m_ActionSpec:
+      m_NumContinuousActions: 0
+      BranchSizes: 01000000
+    VectorActionSize: 01000000
+    VectorActionDescriptions: []
+    VectorActionSpaceType: 0
+    hasUpgradedBrainParametersWithActionSpec: 1
+  m_Model: {fileID: 5022602860645237092, guid: 5b63657848d1e5348a2bd13789e3830a, type: 3}
+  m_InferenceDevice: 0
+  m_BehaviorType: 2
+  m_BehaviorName: My Behavior
+  TeamId: 0
+  m_UseChildSensors: 1
+  m_UseChildActuators: 1
+  m_ObservableAttributeHandling: 0
 --- !u!1 &1139119372
 GameObject:
   m_ObjectHideFlags: 0
@@ -20865,6 +21043,10 @@ PrefabInstance:
       propertyPath: attacker
       value: 
       objectReference: {fileID: 1729620572}
+    - target: {fileID: 3769326597383364910, guid: 6b39927490b190247bdc68ad23496166, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7192765395554730985, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_Name
       value: defender_4
@@ -20912,7 +21094,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7192765395554730985, guid: 6b39927490b190247bdc68ad23496166, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 836222144}
+    - targetCorrespondingSourceObject: {fileID: 7192765395554730985, guid: 6b39927490b190247bdc68ad23496166, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 836222143}
   m_SourcePrefab: {fileID: 100100000, guid: 6b39927490b190247bdc68ad23496166, type: 3}
 --- !u!1 &1203119352
 GameObject:
@@ -29068,7 +29256,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7192765395554730985, guid: 6b39927490b190247bdc68ad23496166, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 163791155}
+    - targetCorrespondingSourceObject: {fileID: 7192765395554730985, guid: 6b39927490b190247bdc68ad23496166, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 163791154}
   m_SourcePrefab: {fileID: 100100000, guid: 6b39927490b190247bdc68ad23496166, type: 3}
 --- !u!1 &1863100635
 GameObject:
