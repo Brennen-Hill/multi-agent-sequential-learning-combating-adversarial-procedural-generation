@@ -18,13 +18,14 @@ public class attacker_script : MonoBehaviour
     void Start()
     {
         //Reduces the framerate to make visualization easier
-        Application.targetFrameRate = 4;
-
+        //Application.targetFrameRate = 4;
+        // register this object with the GameTicker event
+        GameTicker.instance.BoardTick.AddListener(OnBoardTick);
         energy = max_energy;
     }
 
-    // Update is called once per frame
-    void Update()
+    // Will be called once every game tick/turn
+    void OnBoardTick()
     {
         //Get the next action
         int[] known_information = get_known_information();
