@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 public class defender_script : MonoBehaviour
 {
@@ -420,6 +421,7 @@ public class defender_script : MonoBehaviour
         life -= total_damage;
         if(life <= 0 && old_life > 0) {
             print("GAME OVER, DEFEATED DEFENDER");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
 }

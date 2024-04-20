@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 public class spawn_script : MonoBehaviour
 {
@@ -125,6 +126,7 @@ public class spawn_script : MonoBehaviour
         z = Math.Max(z - distance, -1);
         if(z < 0 && old_z > 0) {
             print("GAME OVER, PASSED DEFENDERS");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
 
