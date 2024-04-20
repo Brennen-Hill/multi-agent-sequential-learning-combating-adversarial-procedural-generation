@@ -316,8 +316,9 @@ public class defender_script : MonoBehaviour
                 closest_spawn = spawn;
             }
         }
+        
+        doBulletAnimation(closest_spawn);
         if(closest_spawn != null) {
-            doBulletAnimation(closest_spawn);
             closest_spawn.take_damage(damage, spawns, roleAttributes.physical_penetration, roleAttributes.magic_penetration, roleAttributes.damage_type);
         }
     }

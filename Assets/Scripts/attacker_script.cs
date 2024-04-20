@@ -80,13 +80,21 @@ public class attacker_script : MonoBehaviour
         int max_magic_penetration = 5;
         int min_damage_type = 0;
         int max_damage_type = 1;
-        return new int[] {choice, random.Next(min_x, max_x), random.Next(min_speed, max_speed),
-            random.Next(min_range, max_range), random.Next(min_damage, max_damage), random.Next(min_life, max_life),
-            random.Next(min_regen, max_regen), random.Next(min_leach, max_leach),
-            random.Next(min_physical_defense, max_physical_defense), random.Next(min_magic_defense, max_magic_defense),
-            random.Next(min_physical_penetration, max_physical_penetration), random.Next(min_magic_penetration, max_magic_penetration),
-            random.Next(min_damage_type, max_damage_type)
+        return new int[] {choice, random.Next(min_x, max_x), get_simulated_random(min_speed, max_speed),
+            get_simulated_random(min_range, max_range), get_simulated_random(min_damage, max_damage), get_simulated_random(min_life, max_life),
+            get_simulated_random(min_regen, max_regen), get_simulated_random(min_leach, max_leach),
+            get_simulated_random(min_physical_defense, max_physical_defense), get_simulated_random(min_magic_defense, max_magic_defense),
+            get_simulated_random(min_physical_penetration, max_physical_penetration), get_simulated_random(min_magic_penetration, max_magic_penetration),
+            get_simulated_random(min_damage_type, max_damage_type)
         };
+    }
+
+    private int get_simulated_random(int min, int max) {
+        if(random.Next(10) == 0) {
+            return random.Next(min, max);
+        } else {
+            return min;
+        }
     }
 
     //To assist in energy management, sometimes does nothing
