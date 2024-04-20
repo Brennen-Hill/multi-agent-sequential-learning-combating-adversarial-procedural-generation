@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 public class spawn_script : MonoBehaviour
 {
@@ -35,10 +36,14 @@ public class spawn_script : MonoBehaviour
     void Start()
     {
         collect_defenders();        
+        update_graphic();
+
+        // register this object with the GameTicker event
+        GameTicker.instance.BoardTick.AddListener(OnBoardTick);
     }
 
-    // Update is called once per frame
-    void Update()
+    // Will be called once every tick/turn
+    void OnBoardTick()
     {
         move_and_attack();
         regenerate();
@@ -121,6 +126,7 @@ public class spawn_script : MonoBehaviour
         z = Math.Max(z - distance, -1);
         if(z < 0 && old_z > 0) {
             print("GAME OVER, PASSED DEFENDERS");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
 
