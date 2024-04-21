@@ -5,46 +5,45 @@ using System;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
+using Unity.VisualScripting;
 
-public class defender_agent : Agent
+public class defender_agent : defender_script
 {
-    //Store location in x,y,z
-    public int x;
-    private const int y = 0;
-    public int z;
-    private const int max_life = 100;
-    public int life;
-    private const int damage = 1;
-    private const int heal_ammount = 1;
-    public int pos;
-    public attacker_script attacker;
-    public ArrayList spawn_positions = new ArrayList();
-    System.Random random = new System.Random();
-    // Start is called before the first frame update
-    void Start()
-    {
-        x = random.Next(10);
-        life = max_life;
-        // update_graphic();
-    }
-
+    // private int role 
+    // public int pos;
     public override void OnEpisodeBegin()
     {
         x = 0;
         life = max_life;
     }
-    // Update is called once per frame
-    void Update()
-    {
-        pos = ((int)this.transform.position.x);
-        // take_action();
-        // update_graphic();
+
+    void Update(){
+        // Debug.Log(roleAttributes == null);
     }
-    
-    //Calculate an action based on the defender's known information and take that action
-    void take_action(int action) {
+    public override void CollectObservations(VectorSensor sensor)
+    {
+        int[] known_information = Get_known_information();
+        
+        foreach (int info in known_information) {
+            sensor.AddObservation(info);
+        }
+        // sensor.AddObservation(x);
+        // foreach (Vector3 spawn_pos in spawn_positions) {
+        //     sensor.AddObservation(spawn_pos.x);
+        //     sensor.AddObservation(spawn_pos.y);
+        //     sensor.AddObservation(spawn_pos.z);
+        // }
+        // base.CollectObservations(sensor);
+    }
+    protected override void requestAction()    {
+        AddReward(0.01f);
+        RequestDecision();
+    }
+    protected override void take_action(int action) {
         // int[] known_information = get_known_information();
         // int action = get_action(known_information);
+        RequestDecision();
+        // Debug.Log("Agent take Action: " + action);
         switch(action) {
             case 0:
                 move_left();
@@ -53,99 +52,57 @@ public class defender_agent : Agent
                 move_right();
                 break;
             case 2:
-                shoot();
+                if(shoot()) {
+                    AddReward(0.1f);
+                }
                 break;
             case 3:
                 heal();
                 break;
+            case 4:
+                roleAttributes.roleAction(this);
+                break;
+            case 5:
+                do_nothing();
+                break;
         }
     }
-
-    //Gather the information known to the defender and format it for processing
-    int[] get_known_information() {
-        return null;
-    }
-
-    //Decides on an action based on the passed information
-    int get_action(int[] known_information) {
-        return random.Next(4);
-    }
-
-    //Move to the square to the left if it is available
-    void move_left() {
-        print_action("move_left");
-        x -= 1;
-        x = Math.Max(0, x);
-    }
-
-    //Move to the square to the right if it is available
-    void move_right() {
-        print_action("move_right");
-        x += 1;
-        x = Math.Min(x, 9);
-    }
-
-    //Shoot the closest spawn in the same lane if one is there
-    void shoot() {
-        print_action("shoot");
-        ArrayList spawns = attacker.spawns;
-        spawn_script closest_spawn = null;
-        foreach(spawn_script spawn in spawns) {
-            if(spawn.x == x && spawn.z >= z && (closest_spawn == null || spawn.z < closest_spawn.z)) {
-                closest_spawn = spawn;
+    private int[] Get_known_information() {
+        int input_size = 40;
+        if(attacker.spawns ==null) return new int[input_size];
+        int[] rtn = new int[input_size];
+        rtn[0] = this.Role2int();
+        rtn[1] = x;
+        for(int i = 0; i < otherDefenders.Count; i++) {
+            defender_script defender = otherDefenders[i];
+            if(defender == this) continue;
+            rtn[i*2+2] = defender.Role2int();
+            rtn[i*2+3] = defender.x;
+        }
+        int current_size = otherDefenders.Count*2;
+        int space_left = input_size - current_size;
+        for(int i = 0; i + 1 < space_left; i+=2) {
+            if(i/2 < attacker.spawns.Count){
+                spawn_script spawn = (spawn_script)attacker.spawns[i/2];
+                rtn[current_size + i] = spawn.x;
+                rtn[current_size + i+1] = spawn.z;
+            }else{
+                rtn[current_size + i] = 0;
+                rtn[current_size + i+1] = 0;
             }
         }
-        if(closest_spawn != null)
-            closest_spawn.take_damage(damage, spawns);
-    }
-
-    //Recover health
-    void heal() {
-        print_action("heal");
-        life += heal_ammount;
-        life = Math.Min(life, max_life);
-    }
-
-    //Update's the defender's visual representation
-    void update_graphic() {
-        transform.position = new Vector3(x, y, z);
-    }
-
-    //Prints out an action in a formatted manner
-    void print_action(string action) {
-        //print("Unit: Defender " + z + " || Action: " + action);  
-    }
-
-    //Take damage dealt by a spawn, and accept defeat if life is reduced to 0
-    public void take_damage(int damage_dealt) {
-        int old_life = life;
-        life -= damage_dealt;
-        if(life <= 0 && old_life > 0) {
-            print("GAME OVER, DEFEATED DEFENDER");
-        }
-    }
-
-    public override void CollectObservations(VectorSensor sensor)
-    {
-        sensor.AddObservation(pos);
-        foreach (Vector3 spawn_pos in spawn_positions) {
-            sensor.AddObservation(spawn_pos.x);
-            sensor.AddObservation(spawn_pos.y);
-            sensor.AddObservation(spawn_pos.z);
-        }
-        // base.CollectObservations(sensor);
+        return rtn;
     }
 
     public override void OnActionReceived(ActionBuffers actions)
     {
         // Debug.Log("OnActionReceived" + actions.DiscreteActions[0]);
         take_action(actions.DiscreteActions[0]);
-        update_graphic();
     }
 
     public void game_over() {
-        print("Reward");
-        SetReward(-1.0f);
+        // print("Reward");
+        AddReward(-1.0f);
         EndEpisode();
     }
 }

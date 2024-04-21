@@ -13,7 +13,7 @@ public class spawn_script : MonoBehaviour
     private int range;
     private int damage;
     private int max_life;
-    private int life;
+    public int life;
     private int regen;
     private int leach;
     private int physical_defense;
@@ -115,6 +115,8 @@ public class spawn_script : MonoBehaviour
         if(distance_to_move > 0) move(distance_to_move);
 
         if(closest_defender != null && z - closest_defender.z <= range) {
+            // Debug.Log($"spawn_script/move_and_attack closest_defender.attributes == null {closest_defender.roleAttributes == null}");
+        
             attack(closest_defender);
         }
 
@@ -124,14 +126,17 @@ public class spawn_script : MonoBehaviour
     void move(int distance) {
         int old_z = z;
         z = Math.Max(z - distance, -1);
-        if(z < 0 && old_z > 0) {
-            print("GAME OVER, PASSED DEFENDERS");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-        }
+        // if(z < 0 && old_z > 0) {
+        //     print("GAME OVER, PASSED DEFENDERS");
+        //     //reload scene 
+        //     // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        //     SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        // }
     }
 
     //Attack the nearest defender in the same lane
     void attack(defender_script defender) {
+        // Debug.Log($"spawn_script/attack defender.attributes == null {defender.roleAttributes == null}");
         defender.take_damage(damage, physical_penetration, magic_penetration, damage_type);
     }
 

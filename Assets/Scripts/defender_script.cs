@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
+using Unity.MLAgents;
 
-public class defender_script : MonoBehaviour
+public class defender_script : Agent
 {
 
-    class RoleAttributes
+    public class RoleAttributes
     {
         public enum Role
         {
@@ -185,12 +186,12 @@ public class defender_script : MonoBehaviour
         }
     }
 
-    delegate bool RoleAction(defender_script defenderView);
+    public delegate bool RoleAction(defender_script defenderView);
 
-    private RoleAttributes roleAttributes;
+    public RoleAttributes roleAttributes;
 
     [SerializeField]
-    RoleAttributes.Role Role;
+    public RoleAttributes.Role Role;
 
     // set this to the bullet prefab asset
     // (will be instantiated every time a bullet is shot)
@@ -204,7 +205,7 @@ public class defender_script : MonoBehaviour
     private const int y = 0;
     public int z;
 
-    private const int max_life = 100;
+    public const int max_life = 100;
     public int life;
     private const int damage = 1;
     private const int max_energy = 10000;
@@ -216,8 +217,10 @@ public class defender_script : MonoBehaviour
 
     public attacker_script attacker;
     System.Random random = new System.Random();
+    public ArrayList spawn_positions = new ArrayList();
+    protected List<defender_script> otherDefenders;
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
         roleAttributes = new RoleAttributes(this.Role);
 
@@ -239,20 +242,29 @@ public class defender_script : MonoBehaviour
             Debug.Log("couldn't find bulletParent (tag an object with \"BulletParent\" tag)");
             bulletParent = transform;
         }
+        // Convert array to list
+        otherDefenders = new List<defender_script>(FindObjectsOfType<defender_script>());
+
+        // Remove the current instance from the list
+        otherDefenders.Remove(this);
     }
 
     // Will be called once every tick/turn
-    void OnBoardTick()
+    public virtual void OnBoardTick()
     {
-        take_action();
+        //Request for next action   //ADD
+        requestAction();
         increase_energy();
         update_graphic();
     }
     
+    protected virtual void requestAction() {
+        take_action(random.Next(6));
+    }
     //Calculate an action based on the defender's known information and take that action
-    void take_action() {
-        int[] known_information = get_known_information();
-        int action = get_action(known_information);
+    protected virtual void take_action(int action) {
+        // int[] known_information = get_known_information();
+        // int action = get_action(known_information);
         switch(action) {
             case 0:
                 move_left();
@@ -276,8 +288,13 @@ public class defender_script : MonoBehaviour
     }
 
     //Gather the information known to the defender and format it for processing
-    int[] get_known_information() {
-        return null;
+    public int[] get_known_information() {
+        if(attacker.spawns == null) return new int[20];
+        int[] rtn = new int[20];
+        for(int i = 0; i < 20; i++) {
+            rtn[i] = i < attacker.spawns.Count? ((spawn_script)attacker.spawns[i]).z: 0;
+        }
+        return rtn;
     }
 
     //Decides on an action based on the passed information
@@ -286,7 +303,7 @@ public class defender_script : MonoBehaviour
     }
 
     //Move to the square to the left if it is available
-    void move_left() {
+    public void move_left() {
         //Checks that the action is affordable; otherwise does nothing this tick
         if(!check_energy(10)) return;
         print_action("move_left");
@@ -295,7 +312,7 @@ public class defender_script : MonoBehaviour
     }
 
     //Move to the square to the right if it is available
-    void move_right() {
+    public void move_right() {
         //Checks that the action is affordable; otherwise does nothing this tick
         if(!check_energy(10)) return;
 
@@ -305,9 +322,9 @@ public class defender_script : MonoBehaviour
     }
 
     //Shoot the closest spawn in the same lane if one is there
-    void shoot() {
+    public bool shoot() {
         //Checks that the action is affordable; otherwise does nothing this tick
-        if(!check_energy(2)) return;
+        if(!check_energy(2)) return false;
 
         print_action("shoot");
         ArrayList spawns = attacker.spawns;
@@ -321,7 +338,9 @@ public class defender_script : MonoBehaviour
         doBulletAnimation(closest_spawn);
         if(closest_spawn != null) {
             closest_spawn.take_damage(damage, spawns, roleAttributes.physical_penetration, roleAttributes.magic_penetration, roleAttributes.damage_type);
+            return true;
         }
+        return false;
     }
 
     // do the aesthetic part of the bullet firing, i.e. play the animation
@@ -355,7 +374,7 @@ public class defender_script : MonoBehaviour
     }
 
     //Recover health
-    void heal() {
+    public void heal() {
         //Checks that the action is affordable; otherwise does nothing this tick
         if(!check_energy(100)) return;
 
@@ -364,7 +383,7 @@ public class defender_script : MonoBehaviour
     }
 
     //To assist in energy management, sometimes does nothing
-    void do_nothing() {
+    public void do_nothing() {
         print_action("do_nothing");
     }
 
@@ -382,13 +401,13 @@ public class defender_script : MonoBehaviour
     }
 
     //Update's the defender's visual representation
-    void update_graphic() {
+    public void update_graphic() {
         transform.position = new Vector3(x, y, z);
 
     }
 
     //Increases the defender's action each tick
-    void increase_energy() {
+    public void increase_energy() {
         energy = Math.Min(max_energy, energy + energy_refill_rate);
     }
 
@@ -405,6 +424,9 @@ public class defender_script : MonoBehaviour
     ** damage_type: the type of damage, either physical or magic, which corresponds to defense and penetration values
     */
     public void take_damage(int damage_dealt, int physical_penetration, int magic_penetration, string damage_type) {
+        if(roleAttributes == null){
+            print("roleAttributes is null");
+        }
         int old_life = life;
         int total_damage = damage_dealt;
 
@@ -425,4 +447,15 @@ public class defender_script : MonoBehaviour
         }
     }
 
+    public int Role2int()
+    {
+        return Role switch
+        {
+            RoleAttributes.Role.Mage => 0,
+            RoleAttributes.Role.Healer => 1,
+            RoleAttributes.Role.Tank => 2,
+            RoleAttributes.Role.SharpShooter => 3,
+            _ => -1,
+        };
+    }
 }

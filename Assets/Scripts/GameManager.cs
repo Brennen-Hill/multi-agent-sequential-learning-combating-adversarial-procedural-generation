@@ -5,13 +5,13 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public defender_agent[] defenders;
-    public attacker_agent attacker;
+    public attacker_script attacker;
     // Start is called before the first frame update
     private ArrayList spawns = new ArrayList();
     void Start()
     {
         defenders = FindObjectsOfType<defender_agent>();
-        attacker = FindObjectOfType<attacker_agent>();
+        attacker = FindObjectOfType<attacker_script>();
     }
 
     // Update is called once per frame

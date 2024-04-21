@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using System;
+using Unity.MLAgents;
 
-public class attacker_script : MonoBehaviour
+public class attacker_script : Agent
 {
-    private System.Random random = new System.Random();
+    public System.Random random = new System.Random();
     public GameObject Unborn_Spawn;
     public ArrayList spawns = new ArrayList();
 
@@ -25,7 +26,7 @@ public class attacker_script : MonoBehaviour
     }
 
     // Will be called once every game tick/turn
-    void OnBoardTick()
+     void OnBoardTick()
     {
         //Get the next action
         int[] known_information = get_known_information();
@@ -43,6 +44,7 @@ public class attacker_script : MonoBehaviour
                 spawn(spawn_data);
                 break;
         }
+        spawns.Sort(new SpawnComparer());
     }
 
     //Gather the information known to the attacker and format it for processing
@@ -171,6 +173,39 @@ public class attacker_script : MonoBehaviour
     //Prints out an action in a formatted manner
     void print_action(string action) {
         //print("Unit: Attacker || Action: " + action);  
+    }
+
+
+    public class SpawnComparer : IComparer
+    {
+        public int Compare(object a, object b)
+        {
+            spawn_script spawnA = (spawn_script)a;
+            spawn_script spawnB = (spawn_script)b;
+            if (spawnA == null || spawnB == null)
+            {
+                throw new ArgumentException("Objects are not of type Spawn");
+            }
+            return spawnA.z.CompareTo(spawnB.z);
+        }
+    }
+
+    
+    public bool check_game_over(){
+        foreach(spawn_script spawn in spawns) {
+            if(spawn.z <= 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void restart(){
+        foreach(spawn_script spawn in spawns) {
+            Destroy(spawn.gameObject);
+        }
+        spawns.Clear();
+
     }
 
 }

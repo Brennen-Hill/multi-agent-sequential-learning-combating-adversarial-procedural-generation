@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.MLAgents;
 
 // This script will lerp a bullet along a vector until it reaches its target.
 // purely for game aesthetic, no behavior is being calculated here.
