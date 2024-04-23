@@ -1,15 +1,16 @@
 ﻿<Properties StartupConfiguration="{FD81D3B9-BA64-BF4F-45EF-5C8E104B699B}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/attacker_script.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GarrettMainMenu.cs">
     <Files>
-      <File FileName="Assets/Garrett Assets/GarrettMainMenu.cs" Line="10" Column="76" />
-      <File FileName="Assets/Scripts/defender_script.cs" Line="5" Column="35" />
-      <File FileName="Assets/Scripts/spawn_script.cs" Line="129" Column="82" />
+      <File FileName="Assets/Scripts/defender_script.cs" />
+      <File FileName="Assets/Scripts/spawn_script.cs" />
       <File FileName="Assets/Scripts/attacker_script.cs" Line="149" Column="9" />
+      <File FileName="Assets/Scripts/PauseMenu.cs" Line="8" Column="15" />
+      <File FileName="Assets/Scripts/GarrettMainMenu.cs" Line="10" Column="32" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="193cd858-70a8-400f-a937-0afb9cf18aa6" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="798eaf1d-91c7-4c40-9784-693d44f72302" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

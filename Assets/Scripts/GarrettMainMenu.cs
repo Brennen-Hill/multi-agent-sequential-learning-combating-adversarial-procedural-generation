@@ -7,7 +7,7 @@ public class menuscript : MonoBehaviour
 {
     public void PlayGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene("Garrett-TakaScene");
 
     }
     public void QuitGame()
@@ -18,6 +18,6 @@ public class menuscript : MonoBehaviour
 
     public void MainMenu()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 2);
+        SceneManager.LoadScene("Garrett Start");
     }
 }
