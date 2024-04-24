@@ -23,6 +23,13 @@ public class spawn_script : MonoBehaviour
     private string damage_type;
     public TextMesh header;
 
+    // set this to the bullet prefab asset
+    // (will be instantiated every time a bullet is shot)
+    [SerializeField]
+    private GameObject bulletPrefab;
+
+    private Transform bulletParent;
+
     public void removeDefences()
     {
         this.physical_defense = 0;
@@ -40,6 +47,13 @@ public class spawn_script : MonoBehaviour
 
         // register this object with the GameTicker event
         GameTicker.instance.BoardTick.AddListener(OnBoardTick);
+
+        // set the bulletParent
+        bulletParent = GameObject.FindGameObjectWithTag("BulletParent").transform;
+        if (bulletParent == null) {
+            Debug.Log("couldn't find bulletParent (tag an object with \"BulletParent\" tag)");
+            bulletParent = transform;
+        }
     }
 
     // Will be called once every tick/turn
@@ -116,10 +130,32 @@ public class spawn_script : MonoBehaviour
 
         if(closest_defender != null && z - closest_defender.z <= range) {
             // Debug.Log($"spawn_script/move_and_attack closest_defender.attributes == null {closest_defender.roleAttributes == null}");
-        
+            doBulletAnimation(closest_defender);
             attack(closest_defender);
         }
 
+    }
+
+    private void doBulletAnimation(defender_script target) {
+        // figure out the trajectory of the bullet
+        Vector3 start = new Vector3(x, y, z);
+
+        Vector3 end;
+        // if the bullet does 
+        if (target != null) {
+            // bullet should end on impact
+            end = target.transform.position;
+        }
+        else {
+            // if the bullet does not reach its target, it will despawn after an arbitrary number of units
+            end = start + (130 * Vector3.back);
+        }
+
+        // create a new instance of prefab
+        GameObject newBullet = Instantiate(bulletPrefab, bulletParent);
+        Bullet animator = newBullet.GetComponent<Bullet>();
+
+        animator.configureBulletAnimation(start, end);
     }
 
     //Move torwards the end of the board. Move no closer to a defender than needed to be in range to attack
@@ -137,6 +173,7 @@ public class spawn_script : MonoBehaviour
     //Attack the nearest defender in the same lane
     void attack(defender_script defender) {
         // Debug.Log($"spawn_script/attack defender.attributes == null {defender.roleAttributes == null}");
+        Debug.Log("SPAWN SHOOT");
         defender.take_damage(damage, physical_penetration, magic_penetration, damage_type);
     }
 
