@@ -218,4 +218,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   x: 0
   z: 29
+  life: 0
   header: {fileID: 2801842881278918999}
+  bulletPrefab: {fileID: 4298304228183757149, guid: 3131a38705e1c49dcae31f4558432b5c, type: 3}
