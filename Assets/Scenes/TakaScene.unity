@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028326, g: 0.22571333, b: 0.30692202, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4774,7 +4774,7 @@ PrefabInstance:
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 9a6d52ad0004af14f91ee5b2dfd431f0, type: 3}
+      objectReference: {fileID: 5022602860645237092, guid: 0ee406631c02cdb4c85b80c1c991f85a, type: 3}
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_BehaviorName
       value: Tower
@@ -20958,7 +20958,7 @@ PrefabInstance:
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 9a6d52ad0004af14f91ee5b2dfd431f0, type: 3}
+      objectReference: {fileID: 5022602860645237092, guid: 0ee406631c02cdb4c85b80c1c991f85a, type: 3}
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_BehaviorName
       value: Tower
@@ -22040,7 +22040,7 @@ PrefabInstance:
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 9a6d52ad0004af14f91ee5b2dfd431f0, type: 3}
+      objectReference: {fileID: 5022602860645237092, guid: 0ee406631c02cdb4c85b80c1c991f85a, type: 3}
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_BehaviorName
       value: Tower
@@ -29247,7 +29247,7 @@ PrefabInstance:
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 9a6d52ad0004af14f91ee5b2dfd431f0, type: 3}
+      objectReference: {fileID: 5022602860645237092, guid: 0ee406631c02cdb4c85b80c1c991f85a, type: 3}
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_BehaviorName
       value: Tower
