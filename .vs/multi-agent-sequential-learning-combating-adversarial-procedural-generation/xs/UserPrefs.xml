@@ -4,9 +4,9 @@
       <File FileName="Assets/Scripts/defender_script.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/spawn_script.cs" />
       <File FileName="Assets/Scripts/attacker_script.cs" />
-      <File FileName="Assets/Scripts/PauseMenu.cs" />
-      <File FileName="Assets/Scripts/GarrettMainMenu.cs" Line="10" Column="32" />
-      <File FileName="Assets/AudioManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/PauseMenu.cs" Line="8" Column="15" />
+      <File FileName="Assets/Scripts/GarrettMainMenu.cs" Line="10" Column="53" />
+      <File FileName="Assets/AudioManager.cs" Line="13" Column="28" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
