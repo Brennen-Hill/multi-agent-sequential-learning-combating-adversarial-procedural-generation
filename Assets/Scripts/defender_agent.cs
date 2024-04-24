@@ -111,7 +111,7 @@ public class defender_agent : defender_script
             sensor.AddObservation(spawn.magic_penetration);
         }
         
-        Debug.Log(otherDefenders.Count);
+        // Debug.Log(otherDefenders.Count);
         int current_size = 6 + maxDefenders*2 + 7*howManySpawns;
         int space_left = expected_size - current_size;
         for(int i = 0; i < space_left; i++) {
