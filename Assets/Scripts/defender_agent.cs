@@ -9,6 +9,7 @@ using Unity.VisualScripting;
 
 public class defender_agent : defender_script
 {
+
     // private int role 
     // public int pos;
     public override void OnEpisodeBegin()
@@ -36,7 +37,7 @@ public class defender_agent : defender_script
         // base.CollectObservations(sensor);
     }
     protected override void requestAction()    {
-        AddReward(0.01f);
+        AddReward(REWARD_ALIVE_PER_TICK);
         RequestDecision();
     }
     protected override void take_action(int action) {
@@ -52,9 +53,7 @@ public class defender_agent : defender_script
                 move_right();
                 break;
             case 2:
-                if(shoot()) {
-                    AddReward(0.01f);
-                }
+                shoot();
                 break;
             case 3:
                 heal();
@@ -68,18 +67,19 @@ public class defender_agent : defender_script
         }
     }
     private int[] Get_known_information() {
-        int input_size = 40;
+        int input_size = 41;
         if(attacker.spawns ==null) {Debug.Log($"Attacker.spawn is NULL!!"); return new int[input_size];}
         int[] rtn = new int[input_size];
         rtn[0] = this.Role2int();
         rtn[1] = x;
+        rtn[2] = energy;
         for(int i = 0; i < otherDefenders.Count; i++) {
             defender_script defender = otherDefenders[i];
             if(defender == this) continue;
-            rtn[i*2+2] = defender.Role2int();
-            rtn[i*2+3] = defender.x;
+            rtn[i*2+3] = defender.Role2int();
+            rtn[i*2+4] = defender.x;
         }
-        int current_size = otherDefenders.Count*2;
+        int current_size = otherDefenders.Count*2 + 1;
         int space_left = input_size - current_size;
         for(int i = 0; i + 1 < space_left; i+=2) {
             if(i/2 < attacker.spawns.Count){

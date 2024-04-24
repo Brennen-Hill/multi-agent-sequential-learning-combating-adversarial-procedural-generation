@@ -152,7 +152,7 @@ public class spawn_script : MonoBehaviour
     ** magic_penetration: the ammount of magic_defense that is ignored by the attack
     ** damage_type: the type of damage, either physical or magic, which corresponds to defense and penetration values
     */
-    public void take_damage(int damage_dealt, ArrayList spawns, int physical_penetration, int magic_penetration, string damage_type) {
+    public (int, bool) take_damage(int damage_dealt, ArrayList spawns, int physical_penetration, int magic_penetration, string damage_type) {
         int total_damage = damage_dealt;
 
         //decrease damage by any defense of the damage type, after reducing defense by penetration
@@ -171,5 +171,7 @@ public class spawn_script : MonoBehaviour
             spawns.Remove(this);
             Destroy(gameObject);
         }
+
+        return (total_damage, life <= 0);
     }
 }

@@ -7,6 +7,11 @@ using Unity.MLAgents;
 
 public class defender_script : Agent
 {
+    protected const float REWARD_ALIVE_PER_TICK = 1.0f;
+    protected const float REWARD_ENEMY_DMG_MULTIPLIER = 1f;
+    protected const float REWARD_ENEMY_KILLED = 3;
+    protected const float REWARD_HEAL_MULTIPLIER = 1f;
+    protected const float REWARD_DEBUFF_MULTIPLIER = 2f;
 
     public class RoleAttributes
     {
@@ -119,7 +124,9 @@ public class defender_script : Agent
             ArrayList newSpawns = new ArrayList(enemies);
             foreach(spawn_script enemy in enemiesAtEachPoint[pos])
             {
-                enemy.take_damage(200, newSpawns, 100, 0, "physical");
+                var outcome = enemy.take_damage(200, newSpawns, 100, 0, "physical");
+                defender.AddReward(outcome.Item1 * REWARD_ENEMY_DMG_MULTIPLIER);
+                if (outcome.Item2) defender.AddReward(REWARD_ENEMY_KILLED);
             }
             defender.attacker.spawns = newSpawns;
             print("cannon at " + pos.Item1 + "," + pos.Item2 + " hit " + enemiesAtEachPoint[pos].Count + " enemies");
@@ -134,15 +141,14 @@ public class defender_script : Agent
                 return false;
             }
             defender_script[] allDefenders = FindObjectsByType<defender_script>(FindObjectsSortMode.InstanceID);
-            String before = "";
-            String after = "";
+            int total_healed = 0;
             foreach(var d in allDefenders)
             {
-                before += d.life + " ";
+                int before = d.life;
                 d.HealWithoutEnergy(30);
-                after += d.life + " ";
+                total_healed += (d.life - before);
             }
-            print("healed all party members. Before: " + before + " After: " + after);
+            defender.AddReward(REWARD_HEAL_MULTIPLIER * total_healed);
             return true;
         }
 
@@ -160,7 +166,9 @@ public class defender_script : Agent
             {
                 if (enemy.x == defender.x)
                 {
-                    enemy.take_damage(50, spawns, 100, 0, "physical");
+                    var outcome = enemy.take_damage(50, spawns, 100, 0, "physical");
+                    defender.AddReward(outcome.Item1 * REWARD_ENEMY_DMG_MULTIPLIER);
+                    if (outcome.Item2) defender.AddReward(REWARD_ENEMY_KILLED);
                     n += 1;
                 }
             }
@@ -180,6 +188,7 @@ public class defender_script : Agent
             foreach(spawn_script enemy in defender.attacker.spawns)
             {
                 enemy.removeDefences();
+                defender.AddReward(REWARD_DEBUFF_MULTIPLIER);
             }
             print("debuffed all enemies");
             return true;
@@ -213,7 +222,7 @@ public class defender_script : Agent
 
     private const int energy_refill_rate = 10;
 
-    private int energy;
+    protected int energy;
 
     public attacker_script attacker;
     System.Random random = new System.Random();
@@ -337,7 +346,9 @@ public class defender_script : Agent
         
         doBulletAnimation(closest_spawn);
         if(closest_spawn != null) {
-            closest_spawn.take_damage(damage, spawns, roleAttributes.physical_penetration, roleAttributes.magic_penetration, roleAttributes.damage_type);
+            (int, bool) outcome = closest_spawn.take_damage(damage, spawns, roleAttributes.physical_penetration, roleAttributes.magic_penetration, roleAttributes.damage_type);
+            if (outcome.Item2) AddReward(REWARD_ENEMY_KILLED);
+            AddReward(REWARD_ENEMY_DMG_MULTIPLIER * outcome.Item1);
             return true;
         }
         return false;
@@ -377,6 +388,8 @@ public class defender_script : Agent
     public void heal() {
         //Checks that the action is affordable; otherwise does nothing this tick
         if(!check_energy(100)) return;
+
+        AddReward(roleAttributes.heal_amount * REWARD_HEAL_MULTIPLIER);
 
         print_action("heal");
         HealWithoutEnergy(roleAttributes.heal_amount);
