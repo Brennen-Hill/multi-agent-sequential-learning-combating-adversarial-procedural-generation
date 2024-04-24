@@ -4771,6 +4771,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: defender_2
       objectReference: {fileID: 0}
+    - target: {fileID: 7192765395554730985, guid: 6b39927490b190247bdc68ad23496166, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_Model
       value: 
@@ -20958,14 +20962,14 @@ PrefabInstance:
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: a4387cb984169704d86b14a886983bfa, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_BehaviorName
       value: defender_tower
       objectReference: {fileID: 0}
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_BrainParameters.VectorObservationSize
-      value: 40
+      value: 126
       objectReference: {fileID: 0}
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_BrainParameters.VectorActionSize.Array.data[0]
@@ -22036,6 +22040,10 @@ PrefabInstance:
     - target: {fileID: 7192765395554730985, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_Name
       value: defender_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7192765395554730985, guid: 6b39927490b190247bdc68ad23496166, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_Model
@@ -29243,6 +29251,10 @@ PrefabInstance:
     - target: {fileID: 7192765395554730985, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_Name
       value: defender_3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7192765395554730985, guid: 6b39927490b190247bdc68ad23496166, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_Model

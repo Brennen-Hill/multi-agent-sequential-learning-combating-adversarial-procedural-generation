@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
 using Unity.MLAgents;
+using Unity.MLAgents.Policies;
 
 public class defender_script : Agent
 {
@@ -235,6 +236,7 @@ public class defender_script : Agent
     System.Random random = new System.Random();
     public ArrayList spawn_positions = new ArrayList();
     protected List<defender_script> otherDefenders;
+    protected BehaviorParameters bp;
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -258,6 +260,7 @@ public class defender_script : Agent
 
         // Remove the current instance from the list
         otherDefenders.Remove(this);
+        bp = GetComponent<BehaviorParameters>();
     }
 
     protected virtual void initialize() {
