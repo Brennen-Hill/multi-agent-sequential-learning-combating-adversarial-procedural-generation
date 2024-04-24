@@ -36,13 +36,13 @@ public class defender_agent : defender_script
         // base.CollectObservations(sensor);
     }
     protected override void requestAction()    {
-        AddReward(0.01f);
+        AddReward(0.1f);
         RequestDecision();
     }
     protected override void take_action(int action) {
         // int[] known_information = get_known_information();
         // int action = get_action(known_information);
-        RequestDecision();
+        // RequestDecision();
         // Debug.Log("Agent take Action: " + action);
         switch(action) {
             case 0:
@@ -53,7 +53,7 @@ public class defender_agent : defender_script
                 break;
             case 2:
                 if(shoot()) {
-                    AddReward(0.1f);
+                    AddReward(0.01f);
                 }
                 break;
             case 3:
@@ -87,8 +87,8 @@ public class defender_agent : defender_script
                 rtn[current_size + i] = spawn.x;
                 rtn[current_size + i+1] = spawn.z;
             }else{
-                rtn[current_size + i] = 0;
-                rtn[current_size + i+1] = 0;
+                rtn[current_size + i] = -1;
+                rtn[current_size + i+1] = -1;
             }
         }
         return rtn;
