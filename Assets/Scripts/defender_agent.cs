@@ -36,7 +36,7 @@ public class defender_agent : defender_script
         // base.CollectObservations(sensor);
     }
     protected override void requestAction()    {
-        AddReward(0.1f);
+        AddReward(0.01f);
         RequestDecision();
     }
     protected override void take_action(int action) {
@@ -69,7 +69,7 @@ public class defender_agent : defender_script
     }
     private int[] Get_known_information() {
         int input_size = 40;
-        if(attacker.spawns ==null) return new int[input_size];
+        if(attacker.spawns ==null) {Debug.Log($"Attacker.spawn is NULL!!"); return new int[input_size];}
         int[] rtn = new int[input_size];
         rtn[0] = this.Role2int();
         rtn[1] = x;
