@@ -55,21 +55,23 @@ public class attacker_script : Agent
     //Decides on an action based on the passed information
     int[] get_action(int[] known_information) {
         int num_actions = 2;
+        int choice_offset = 1;
         int choice = random.Next(num_actions);
             //OVERRIDING choice: decrease number of times action 0 is taken in example
-            choice = Math.Max(random.Next(num_actions + 3) - 3, 0);
+            choice = Math.Max(random.Next(num_actions + choice_offset) - choice_offset, 0);
+
         int min_x = 0;
         int max_x = 10;
         int min_speed = 1;
         int max_speed = 5;
         int min_range = 1;
-        int max_range = 5;
+        int max_range = 25;
         int min_damage = 1;
         int max_damage = 5;
         int min_life = 1;
-        int max_life = 5;
+        int max_life = 15;
         int min_regen = 0;
-        int max_regen = 5;
+        int max_regen = 3;
         int min_leach = 0;
         int max_leach = 5;
         int min_physical_defense = 0;
@@ -122,39 +124,55 @@ public class attacker_script : Agent
         string damage_type_description = damage_type == 0 ? "physical" : "magic";
 
         //Used to increase cost of actions, rather than decreasing maximum energy,to ensure energy costs are integers
-        int cost_multiplier = 2;
+        int cost_multiplier = 1;
         
         //Calculate cost of the action
             //Ratios set to 1.0 have no effect
             //Ratios not set to 1 modify weight of certain rates to matter more than others
             //Some values are incremented by 1 because they may have 0 as a value
-        double speed_ratio = 1.0; double range_ratio = 1.0; double damage_ratio = 1.0; double life_ratio = 1.0;
-        double leach_ratio = 1.0; double physical_defense_ratio = 3.5; double magic_defense_ratio = 4.5;
-        double regen_ratio = 2.0; double physical_penetration_ratio = 2.0; double magic_penetration_ratio = 2.5;
+        double speed_ratio = 1.0; double range_ratio = 0.7; double damage_ratio = 1.0; double life_ratio = 1.0;
+        double leach_ratio = 1.0; double physical_defense_ratio = 2.0; double magic_defense_ratio = 3.0;
+        double regen_ratio = 4.0; double physical_penetration_ratio = 1.25; double magic_penetration_ratio = 1.75;
         double damage_type_ratio = 3.0;
+        int cost = 0;
 
-        int cost = (int) Math.Ceiling(
-            Math.Pow(speed, speed_ratio) *
-            Math.Pow(range, range_ratio) *
-            Math.Pow(damage, damage_ratio) *
-            Math.Pow(life, life_ratio) * 
-            Math.Pow(regen + 1, regen_ratio) * 
-            Math.Pow(leach, leach_ratio + 1) * 
-            Math.Pow(physical_defense + 1, physical_defense_ratio) * 
-            Math.Pow(magic_defense + 1, magic_defense_ratio) *
-            Math.Pow(physical_penetration + 1, physical_penetration_ratio) *
-            Math.Pow(magic_penetration + 1, magic_penetration_ratio) *
-            Math.Pow(damage_type + 1, damage_type_ratio) *
-            cost_multiplier
-        );
-
+        try {
+            checked
+            {
+                cost = (int) Math.Ceiling(
+                    Math.Pow(speed, speed_ratio) *
+                    Math.Pow(range, range_ratio) *
+                    Math.Pow(damage, damage_ratio) *
+                    Math.Pow(life, life_ratio) * 
+                    Math.Pow(regen + 1, regen_ratio) * 
+                    Math.Pow(leach + 1, leach_ratio) * 
+                    Math.Pow(physical_defense + 1, physical_defense_ratio) * 
+                    Math.Pow(magic_defense + 1, magic_defense_ratio) *
+                    Math.Pow(physical_penetration + 1, physical_penetration_ratio) *
+                    Math.Pow(magic_penetration + 1, magic_penetration_ratio) *
+                    Math.Pow(damage_type + 1, damage_type_ratio) *
+                    cost_multiplier);
+            }
+        } catch(OverflowException e) {
+            print_action("OVERFLOW cannot_aford_action | Costs: " + cost + " of " + energy);
+        }
         //If the cost of the action is greater than the currrent energy, do nothing
         if(cost > energy) {
             print_action("cannot_aford_action | Costs: " + cost + " of " + energy);
             return;
         }
-        energy -= cost;
+        int pre_energy = energy;
 
+        energy -= cost;
+        print_action("SPAWNING:");
+        print("A: | E: " + energy + " | P: " + pre_energy + " | C: " + cost + " | M: " + max_energy);
+
+        string vals = "";
+        foreach(var item in spawn_data)
+        {
+            vals += item.ToString() + ",";
+        }
+        print("V: " + vals);
         //Initialize the new spawn
         GameObject spawn_instance = Instantiate(Unborn_Spawn);
         spawn_script spawn_code = spawn_instance.GetComponent<spawn_script>();
@@ -172,7 +190,7 @@ public class attacker_script : Agent
 
     //Prints out an action in a formatted manner
     void print_action(string action) {
-        //print("Unit: Attacker || Action: " + action);  
+        print("Unit: Attacker || Action: " + action);  
     }
 
 
