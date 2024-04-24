@@ -41,7 +41,7 @@ public class defender_agent : defender_script
     protected override void take_action(int action) {
         // int[] known_information = get_known_information();
         // int action = get_action(known_information);
-        RequestDecision();
+        // RequestDecision();
         // Debug.Log("Agent take Action: " + action);
         switch(action) {
             case 0:
@@ -52,7 +52,7 @@ public class defender_agent : defender_script
                 break;
             case 2:
                 if(shoot()) {
-                    AddReward(0.1f);
+                    AddReward(0.01f);
                 }
                 break;
             case 3:
@@ -68,7 +68,7 @@ public class defender_agent : defender_script
     }
     private int[] Get_known_information() {
         int input_size = 40;
-        if(attacker.spawns ==null) return new int[input_size];
+        if(attacker.spawns ==null) {Debug.Log($"Attacker.spawn is NULL!!"); return new int[input_size];}
         int[] rtn = new int[input_size];
         rtn[0] = this.Role2int();
         rtn[1] = x;
@@ -86,8 +86,8 @@ public class defender_agent : defender_script
                 rtn[current_size + i] = spawn.x;
                 rtn[current_size + i+1] = spawn.z;
             }else{
-                rtn[current_size + i] = 0;
-                rtn[current_size + i+1] = 0;
+                rtn[current_size + i] = -1;
+                rtn[current_size + i+1] = -1;
             }
         }
         return rtn;
