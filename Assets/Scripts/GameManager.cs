@@ -17,11 +17,13 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        bool defender_dead = false;
         ArrayList spawn_positions = get_spawn_positions(attacker.spawns);
         foreach(defender_agent defender in defenders) {
             defender.spawn_positions = spawn_positions;
+            defender_dead = defender_dead || defender.is_dead();
         }
-        if(attacker.check_game_over()) {
+        if(defender_dead || attacker.check_game_over()) {
             Debug.Log("Game Over: Attackers Win");
             foreach(defender_agent defender in defenders) {
                 defender.game_over();

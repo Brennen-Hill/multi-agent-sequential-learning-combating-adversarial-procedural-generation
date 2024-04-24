@@ -13,8 +13,7 @@ public class defender_agent : defender_script
     // public int pos;
     public override void OnEpisodeBegin()
     {
-        x = 0;
-        life = max_life;
+        initialize();
     }
 
     void Update(){

@@ -33,11 +33,11 @@ public class defender_script : Agent
             this.role = role;
             (int, int, int, int, int, int, string, RoleAction, Color) attrs = this.role switch
             {
-                Role.Mage =>            (0,  10, 0,  20, 10, 30, "magical", DebuffEnemies, Color.blue),
-                Role.Healer =>          (0,  5,  0,  10, 8,  75, "magical", TotalPartyHeal, Color.green),
-                Role.Tank =>            (25, 0,  5,  2,  5,  5,  "physical", Cannon, Color.black),
-                Role.SharpShooter =>    (15, 0,  20, 0,  10, 5,  "physical", ClearLane, Color.red),
-                _ =>                    (-1, -1, -1, -1, -1, -1, "", NoRoleAction, Color.grey),
+                Role.Mage =>            (0,  5,  0,  4,  2, 1, "magical", DebuffEnemies, Color.blue),
+                Role.Healer =>          (0,  2,  0,  2,  4,  2, "magical", TotalPartyHeal, Color.green),
+                Role.Tank =>            (5,  0,  2,  0,  6,  2,  "physical", Cannon, Color.black),
+                Role.SharpShooter =>    (2,  0,  4,  0,  8, 1,  "physical", ClearLane, Color.red),
+                _ =>                    (-1, -1,-1, -1, -1, -1, "", NoRoleAction, Color.grey),
             };
             this.physical_defence = attrs.Item1;
             this.magic_defence = attrs.Item2;
@@ -54,7 +54,7 @@ public class defender_script : Agent
 
         bool Cannon(defender_script defender)
         {
-            if (!defender.check_energy(40))
+            if (!defender.check_energy(ability_cost))
             {
                 return false;
             }
@@ -129,7 +129,7 @@ public class defender_script : Agent
 
         bool TotalPartyHeal(defender_script defender)
         {
-            if (!defender.check_energy(40))
+            if (!defender.check_energy(ability_cost))
             {
                 return false;
             }
@@ -148,7 +148,7 @@ public class defender_script : Agent
 
         bool  ClearLane(defender_script defender)
         {
-            if (!defender.check_energy(40))
+            if (!defender.check_energy(ability_cost))
             {
                 return false;
             }
@@ -172,7 +172,7 @@ public class defender_script : Agent
 
         bool DebuffEnemies(defender_script defender)
         {
-            if (!defender.check_energy(40))
+            if (!defender.check_energy(ability_cost))
             {
                 return false;
             }
@@ -203,15 +203,22 @@ public class defender_script : Agent
     //Store location in x,y,z
     public int x;
     private const int y = 0;
+    private bool dead = false;
     public int z;
 
     public const int max_life = 100;
     public int life;
     private const int damage = 1;
-    private const int max_energy = 10000;
-    private const int start_energy = 1000;
+    public const int max_energy = 1000;
+    public const int start_energy = 100;
 
-    private const int energy_refill_rate = 10;
+    private const int shoot_cost = 10;
+    private const int heal_cost = 50;
+    private const int move_cost = 5;
+    private const int ability_cost = 200;
+    private const int do_nothing_cost = 0;
+
+    private const int energy_refill_rate = 1;
 
     private int energy;
 
@@ -225,11 +232,6 @@ public class defender_script : Agent
         roleAttributes = new RoleAttributes(this.Role);
 
         GetComponent<Renderer>().material.SetColor("_Color", roleAttributes.meshColor);
-
-        //Initialize variables
-        x = random.Next(10);
-        life = max_life;
-        energy = start_energy;
 
         update_graphic();
 
@@ -247,6 +249,14 @@ public class defender_script : Agent
 
         // Remove the current instance from the list
         otherDefenders.Remove(this);
+    }
+
+    protected virtual void initialize() {
+        //Initialize variables
+        x = random.Next(10);
+        life = max_life;
+        energy = start_energy;
+
     }
 
     // Will be called once every tick/turn
@@ -305,7 +315,7 @@ public class defender_script : Agent
     //Move to the square to the left if it is available
     public void move_left() {
         //Checks that the action is affordable; otherwise does nothing this tick
-        if(!check_energy(10)) return;
+        if(!check_energy(move_cost)) return;
         print_action("move_left");
         x -= 1;
         x = Math.Max(0, x);
@@ -314,7 +324,7 @@ public class defender_script : Agent
     //Move to the square to the right if it is available
     public void move_right() {
         //Checks that the action is affordable; otherwise does nothing this tick
-        if(!check_energy(10)) return;
+        if(!check_energy(move_cost)) return;
 
         print_action("move_right");
         x += 1;
@@ -324,7 +334,7 @@ public class defender_script : Agent
     //Shoot the closest spawn in the same lane if one is there
     public bool shoot() {
         //Checks that the action is affordable; otherwise does nothing this tick
-        if(!check_energy(2)) return false;
+        if(!check_energy(shoot_cost)) return false;
 
         print_action("shoot");
         ArrayList spawns = attacker.spawns;
@@ -376,7 +386,7 @@ public class defender_script : Agent
     //Recover health
     public void heal() {
         //Checks that the action is affordable; otherwise does nothing this tick
-        if(!check_energy(100)) return;
+        if(!check_energy(heal_cost)) return;
 
         print_action("heal");
         HealWithoutEnergy(roleAttributes.heal_amount);
@@ -390,6 +400,7 @@ public class defender_script : Agent
     //Determines if energy is high enough for the intended action
     //Decrements energy if possible
     bool check_energy(int cost) {
+        print_action("CHECKING ENERGY: " + energy + ", " + cost + ", " + max_energy);
         //print("A: " + z + " | E: " + energy);
         if(energy < cost) {
             print_action("cannot_aford_action | Costs: " + cost + " of " + energy);
@@ -413,7 +424,7 @@ public class defender_script : Agent
 
     //Prints out an action in a formatted manner
     void print_action(string action) {
-        //print("Unit: Defender " + z + " || Action: " + action);  
+        print("Unit: Defender " + z + " || Action: " + action);  
     }
 
     /* Take damage dealt by a spawn, and accept defeat if life is reduced to 0
@@ -442,9 +453,13 @@ public class defender_script : Agent
         //Reduce life by the calculated damage
         life -= total_damage;
         if(life <= 0 && old_life > 0) {
-            print("GAME OVER, DEFEATED DEFENDER");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            dead = true;
         }
+
+    }
+
+    public bool is_dead() {
+        return dead;
     }
 
     public int Role2int()
