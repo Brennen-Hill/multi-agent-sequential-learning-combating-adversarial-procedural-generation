@@ -11,15 +11,15 @@ public class spawn_script : MonoBehaviour
     public int z = 29;
     private int speed;
     private int range;
-    private int damage;
+    public int damage;
     private int max_life;
     public int life;
     private int regen;
     private int leach;
-    private int physical_defense;
-    private int magic_defense;
-    private int physical_penetration;
-    private int magic_penetration;
+    public int physical_defense;
+    public int magic_defense;
+    public int physical_penetration;
+    public int magic_penetration;
     private string damage_type;
     public TextMesh header;
 

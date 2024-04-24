@@ -22,11 +22,12 @@ public class defender_agent : defender_script
     }
     public override void CollectObservations(VectorSensor sensor)
     {
-        int[] known_information = Get_known_information();
+        //int[] known_information =
+        Set_known_information(sensor);
         
-        foreach (int info in known_information) {
-            sensor.AddObservation(info);
-        }
+        //foreach (int info in known_information) {
+        //    sensor.AddObservation(info);
+        //}
         // sensor.AddObservation(x);
         // foreach (Vector3 spawn_pos in spawn_positions) {
         //     sensor.AddObservation(spawn_pos.x);
@@ -65,32 +66,47 @@ public class defender_agent : defender_script
                 break;
         }
     }
-    private int[] Get_known_information() {
-        int input_size = 41;
-        if(attacker.spawns ==null) {Debug.Log($"Attacker.spawn is NULL!!"); return new int[input_size];}
-        int[] rtn = new int[input_size];
-        rtn[0] = this.Role2int();
-        rtn[1] = x;
-        rtn[2] = energy;
-        for(int i = 0; i < otherDefenders.Count; i++) {
+    private void Set_known_information(VectorSensor sensor) {
+        const int maxSpawns = 16;
+        int expected_size = 8 + 3*2 + maxSpawns*7; // 126
+
+        sensor.AddObservation(this.Role2int());
+        sensor.AddObservation(x);
+        sensor.AddObservation(energy);
+        sensor.AddObservation(roleAttributes.damage);
+        sensor.AddObservation(roleAttributes.physical_defence);
+        sensor.AddObservation(roleAttributes.physical_penetration);
+        sensor.AddObservation(roleAttributes.magic_defence);
+        sensor.AddObservation(roleAttributes.magic_penetration);
+
+        for (int i = 0; i < otherDefenders.Count; i++) {
             defender_script defender = otherDefenders[i];
             if(defender == this) continue;
-            rtn[i*2+3] = defender.Role2int();
-            rtn[i*2+4] = defender.x;
+            sensor.AddObservation(defender.Role2int());
+            sensor.AddObservation(defender.x);
         }
-        int current_size = otherDefenders.Count*2 + 1;
-        int space_left = input_size - current_size;
-        for(int i = 0; i + 1 < space_left; i+=2) {
-            if(i/2 < attacker.spawns.Count){
-                spawn_script spawn = (spawn_script)attacker.spawns[i/2];
-                rtn[current_size + i] = spawn.x;
-                rtn[current_size + i+1] = spawn.z;
-            }else{
-                rtn[current_size + i] = -1;
-                rtn[current_size + i+1] = -1;
-            }
+
+
+        int howManySpawns = 0;
+        if (attacker.spawns == null) howManySpawns = 0;
+        else howManySpawns = attacker.spawns.Count;
+        howManySpawns = howManySpawns > maxSpawns ? maxSpawns : howManySpawns;
+        for(int i = 0; i < howManySpawns; i++)
+        {
+            var spawn = (spawn_script) attacker.spawns[i];
+            sensor.AddObservation(spawn.x);
+            sensor.AddObservation(spawn.z);
+            sensor.AddObservation(spawn.damage);
+            sensor.AddObservation(spawn.physical_defense);
+            sensor.AddObservation(spawn.physical_penetration);
+            sensor.AddObservation(spawn.magic_defense);
+            sensor.AddObservation(spawn.magic_penetration);
         }
-        return rtn;
+
+        while (sensor.ObservationSize() <= expected_size)
+        {
+            sensor.AddObservation(-1);
+        }
     }
 
     public override void OnActionReceived(ActionBuffers actions)
