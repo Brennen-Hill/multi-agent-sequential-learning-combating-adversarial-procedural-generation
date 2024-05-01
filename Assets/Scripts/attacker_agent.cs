@@ -96,7 +96,7 @@ public class attacker_agent : attacker_script
     }
 
     public void game_over() {
-        AddReward(100.0f);
+        AddReward(1.0f);
         EndEpisode();
     }
 }

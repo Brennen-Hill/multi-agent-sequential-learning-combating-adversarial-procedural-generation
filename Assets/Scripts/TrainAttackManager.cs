@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using Unity.MLAgents;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class TrainAttackManager : MonoBehaviour
 {
     public defender_agent[] defenders;
-    public attacker_script attacker;
+    public attacker_agent attacker;
     public bool trainDefenders = true;
     // Start is called before the first frame update
     private ArrayList spawns = new ArrayList();
     void Start()
     {
         defenders = FindObjectsOfType<defender_agent>();
-        attacker = FindObjectOfType<attacker_script>();
+        attacker = FindObjectOfType<attacker_agent>();
     }
 
     // Update is called once per frame
@@ -27,10 +27,10 @@ public class GameManager : MonoBehaviour
         }
         if(defender_dead || attacker.check_game_over()) {
             Debug.Log("Game Over: Attackers Win");
-            foreach(defender_agent defender in defenders) {
-                defender.game_over();
-            }
-            // attacker.game_over();
+            // foreach(defender_agent defender in defenders) {
+            //     // defender.game_over();
+            // }
+            attacker.game_over();
         }
     }
 
