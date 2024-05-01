@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
             foreach(defender_agent defender in defenders) {
                 defender.game_over();
             }
-            attacker.restart();
+            attacker.game_over();
         }
     }
 

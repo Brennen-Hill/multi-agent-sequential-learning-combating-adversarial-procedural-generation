@@ -9,18 +9,18 @@ public class spawn_script : MonoBehaviour
     public int x;
     private const int y = 0;
     public int z = 29;
-    private int speed;
-    private int range;
+    public int speed;
+    public int range;
     public int damage;
-    private int max_life;
+    public int max_life;
     public int life;
-    private int regen;
-    private int leach;
+    public int regen;
+    public int leach;
     public int physical_defense;
     public int magic_defense;
     public int physical_penetration;
     public int magic_penetration;
-    private string damage_type;
+    public string damage_type;
     public TextMesh header;
 
     // set this to the bullet prefab asset

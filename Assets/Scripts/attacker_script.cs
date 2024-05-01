@@ -10,19 +10,23 @@ public class attacker_script : Agent
     public System.Random random = new System.Random();
     public GameObject Unborn_Spawn;
     public ArrayList spawns = new ArrayList();
-
-    private int max_energy = 1000;
-    private int energy;
+    private const int initial_max_energy = 1000;
+    protected int max_energy;
+    protected int energy;
     private const int energy_refill_rate = 10;
     private const int max_energy_rate = 1;
+    protected List<defender_script> defenders;
+
     // Start is called before the first frame update
+    private 
     void Start()
     {
         //Reduces the framerate to make visualization easier
         //Application.targetFrameRate = 4;
         // register this object with the GameTicker event
-        GameTicker.instance.BoardTick.AddListener(OnBoardTick);
-        energy = max_energy;
+//        GameTicker.instance.BoardTick.AddListener(OnBoardTick);
+        //defenders = new List<defender_script>(FindObjectsOfType<defender_script>());
+//        initialize();
     }
 
     // Will be called once every game tick/turn
@@ -94,7 +98,7 @@ public class attacker_script : Agent
     }
 
     private int get_simulated_random(int min, int max) {
-        if(random.Next(10) == 0) {
+        if(random.Next(5) == 0) {
             return random.Next(min, max);
         } else {
             return min;
@@ -107,7 +111,8 @@ public class attacker_script : Agent
     }
 
     //Spawns a spawn that moves torward the other side of the board
-    void spawn(int[] spawn_data) {
+    //Returns true if spawned successfully, otherwise returns false
+    protected bool spawn(int[] spawn_data) {
         //Extract data from spawn_data
         int x = spawn_data[0];
         int speed = spawn_data[1];
@@ -155,14 +160,15 @@ public class attacker_script : Agent
             }
         } catch(OverflowException e) {
             print_action("OVERFLOW cannot_aford_action | Costs: " + cost + " of " + energy);
+            return false;
         }
         //If the cost of the action is greater than the currrent energy, do nothing
         if(cost > energy) {
             print_action("cannot_aford_action | Costs: " + cost + " of " + energy);
-            return;
+            return false;
         }
-        int pre_energy = energy;
 
+        int pre_energy = energy;
         energy -= cost;
         print_action("SPAWNING:");
         print("A: | E: " + energy + " | P: " + pre_energy + " | C: " + cost + " | M: " + max_energy);
@@ -173,12 +179,14 @@ public class attacker_script : Agent
             vals += item.ToString() + ",";
         }
         print("V: " + vals);
+
         //Initialize the new spawn
         GameObject spawn_instance = Instantiate(Unborn_Spawn);
         spawn_script spawn_code = spawn_instance.GetComponent<spawn_script>();
         spawn_code.initialize(x, speed, range, damage, life, regen, leach, physical_defense, magic_defense,
             physical_penetration, magic_penetration, damage_type_description);
         spawns.Add(spawn_code);
+        return true;
     }
 
 
@@ -218,12 +226,16 @@ public class attacker_script : Agent
         return false;
     }
 
-    public void restart(){
-        foreach(spawn_script spawn in spawns) {
-            Destroy(spawn.gameObject);
-        }
-        spawns.Clear();
+    public void initialize(){
 
+        if(spawns != null) {
+            foreach(spawn_script spawn in spawns) {
+                Destroy(spawn.gameObject);
+            }
+            spawns.Clear();
+        }
+        max_energy = initial_max_energy;
+        energy = max_energy;
     }
 
 }
