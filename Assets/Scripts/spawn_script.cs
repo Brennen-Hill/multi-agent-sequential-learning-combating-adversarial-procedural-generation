@@ -102,12 +102,13 @@ public class spawn_script : MonoBehaviour
 
     //Collect the defenders into a set of references for tracking
     void collect_defenders() {
-        defenders = new defender_script[] {
-            GameObject.Find("defender_1").GetComponent<defender_script>(),
-            GameObject.Find("defender_2").GetComponent<defender_script>(),
-            GameObject.Find("defender_3").GetComponent<defender_script>(),
-            GameObject.Find("defender_4").GetComponent<defender_script>()
-        };
+        defenders = new List<defender_script>(FindObjectsOfType<defender_script>()).ToArray();
+        // defenders = new defender_script[] {
+        //     GameObject.Find("defender_1").GetComponent<defender_script>(),
+        //     GameObject.Find("defender_2").GetComponent<defender_script>(),
+        //     GameObject.Find("defender_3").GetComponent<defender_script>(),
+        //     GameObject.Find("defender_4").GetComponent<defender_script>()
+        // };
 
     }
 

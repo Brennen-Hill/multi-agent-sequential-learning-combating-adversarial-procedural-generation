@@ -6,12 +6,14 @@ using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using Unity.VisualScripting;
+using Unity.MLAgents.Policies;
 
 public class defender_agent : defender_script
 {
 
     // private int role 
     // public int pos;
+    // private  BehaviorParameters bp;
     public override void OnEpisodeBegin()
     {
         initialize();
@@ -68,8 +70,10 @@ public class defender_agent : defender_script
     }
     private void Set_known_information(VectorSensor sensor) {
         const int maxSpawns = 16;
-        int expected_size = 8 + 3*2 + maxSpawns*7; // 126
-
+        const int maxDefenders = 4;
+        int expected_size = 6 + maxDefenders*2 + maxSpawns*7; // 126
+        // bp.BrainParameters.VectorObservationSize = expected_size;
+        // int vectorSize = bp.BrainParameters.VectorObservationSize;
         sensor.AddObservation(this.Role2int());
         sensor.AddObservation(x);
         sensor.AddObservation(energy);
@@ -86,6 +90,10 @@ public class defender_agent : defender_script
             sensor.AddObservation(defender.x);
         }
 
+        for (int i = otherDefenders.Count; i < maxDefenders - 1; i++) {
+            sensor.AddObservation(-1);
+            sensor.AddObservation(-1);
+        }
 
         int howManySpawns = 0;
         if (attacker.spawns == null) howManySpawns = 0;
@@ -102,11 +110,14 @@ public class defender_agent : defender_script
             sensor.AddObservation(spawn.magic_defense);
             sensor.AddObservation(spawn.magic_penetration);
         }
-
-        while (sensor.ObservationSize() <= expected_size)
-        {
+        
+        // Debug.Log(otherDefenders.Count);
+        int current_size = 6 + maxDefenders*2 + 7*howManySpawns;
+        int space_left = expected_size - current_size;
+        for(int i = 0; i < space_left; i++) {
             sensor.AddObservation(-1);
         }
+
     }
 
     public override void OnActionReceived(ActionBuffers actions)
