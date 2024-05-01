@@ -126,8 +126,8 @@ public class defender_script : Agent
             foreach(spawn_script enemy in enemiesAtEachPoint[pos])
             {
                 var outcome = enemy.take_damage(200, newSpawns, 100, 0, "physical");
-                defender.AddReward(outcome.Item1 * REWARD_ENEMY_DMG_MULTIPLIER);
-                if (outcome.Item2) defender.AddReward(REWARD_ENEMY_KILLED);
+                // defender.AddReward(outcome.Item1 * REWARD_ENEMY_DMG_MULTIPLIER);
+                // if (outcome.Item2) defender.AddReward(REWARD_ENEMY_KILLED);
             }
             defender.attacker.spawns = newSpawns;
             print("cannon at " + pos.Item1 + "," + pos.Item2 + " hit " + enemiesAtEachPoint[pos].Count + " enemies");
@@ -149,7 +149,7 @@ public class defender_script : Agent
                 d.HealWithoutEnergy(30);
                 total_healed += (d.life - before);
             }
-            defender.AddReward(REWARD_HEAL_MULTIPLIER * total_healed);
+            // defender.AddReward(REWARD_HEAL_MULTIPLIER * total_healed);
             return true;
         }
 
@@ -168,8 +168,8 @@ public class defender_script : Agent
                 if (enemy.x == defender.x)
                 {
                     var outcome = enemy.take_damage(50, spawns, 100, 0, "physical");
-                    defender.AddReward(outcome.Item1 * REWARD_ENEMY_DMG_MULTIPLIER);
-                    if (outcome.Item2) defender.AddReward(REWARD_ENEMY_KILLED);
+                    // defender.AddReward(outcome.Item1 * REWARD_ENEMY_DMG_MULTIPLIER);
+                    // if (outcome.Item2) defender.AddReward(REWARD_ENEMY_KILLED);
                     n += 1;
                 }
             }
@@ -189,7 +189,7 @@ public class defender_script : Agent
             foreach(spawn_script enemy in defender.attacker.spawns)
             {
                 enemy.removeDefences();
-                defender.AddReward(REWARD_DEBUFF_MULTIPLIER);
+                // defender.AddReward(REWARD_DEBUFF_MULTIPLIER);
             }
             print("debuffed all enemies");
             return true;
@@ -222,17 +222,17 @@ public class defender_script : Agent
     public const int max_energy = 1000;
     public const int start_energy = 100;
 
-    private const int shoot_cost = 10;
-    private const int heal_cost = 50;
-    private const int move_cost = 5;
-    private const int ability_cost = 200;
+    private const int shoot_cost = 4;
+    private const int heal_cost = 100;
+    private const int move_cost = 3;
+    private const int ability_cost = 50;
     private const int do_nothing_cost = 0;
 
-    private const int energy_refill_rate = 1;
+    private const int energy_refill_rate = 4;
 
     protected int energy;
 
-    public attacker_script attacker;
+    public attacker_agent attacker;
     System.Random random = new System.Random();
     public ArrayList spawn_positions = new ArrayList();
     protected List<defender_script> otherDefenders;
@@ -360,8 +360,8 @@ public class defender_script : Agent
         doBulletAnimation(closest_spawn);
         if(closest_spawn != null) {
             (int, bool) outcome = closest_spawn.take_damage(damage, spawns, roleAttributes.physical_penetration, roleAttributes.magic_penetration, roleAttributes.damage_type);
-            if (outcome.Item2) AddReward(REWARD_ENEMY_KILLED);
-            AddReward(REWARD_ENEMY_DMG_MULTIPLIER * outcome.Item1);
+            // if (outcome.Item2) AddReward(REWARD_ENEMY_KILLED);
+            // AddReward(REWARD_ENEMY_DMG_MULTIPLIER * outcome.Item1);
             return true;
         }
         return false;

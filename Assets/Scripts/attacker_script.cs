@@ -10,10 +10,10 @@ public class attacker_script : Agent
     public System.Random random = new System.Random();
     public GameObject Unborn_Spawn;
     public ArrayList spawns = new ArrayList();
-    private const int initial_max_energy = 1000;
+    private const int initial_max_energy = 10;
     protected int max_energy;
     protected int energy;
-    private const int energy_refill_rate = 10;
+    private const int energy_refill_rate = 20;
     private const int max_energy_rate = 1;
     protected List<defender_script> defenders;
 
@@ -24,9 +24,9 @@ public class attacker_script : Agent
         //Reduces the framerate to make visualization easier
         //Application.targetFrameRate = 4;
         // register this object with the GameTicker event
-//        GameTicker.instance.BoardTick.AddListener(OnBoardTick);
-        //defenders = new List<defender_script>(FindObjectsOfType<defender_script>());
-//        initialize();
+       GameTicker.instance.BoardTick.AddListener(OnBoardTick);
+        defenders = new List<defender_script>(FindObjectsOfType<defender_script>());
+       initialize();
     }
 
     // Will be called once every game tick/turn
@@ -129,13 +129,13 @@ public class attacker_script : Agent
         string damage_type_description = damage_type == 0 ? "physical" : "magic";
 
         //Used to increase cost of actions, rather than decreasing maximum energy,to ensure energy costs are integers
-        int cost_multiplier = 1;
+        int cost_multiplier = 20;
         
         //Calculate cost of the action
             //Ratios set to 1.0 have no effect
             //Ratios not set to 1 modify weight of certain rates to matter more than others
             //Some values are incremented by 1 because they may have 0 as a value
-        double speed_ratio = 1.0; double range_ratio = 0.7; double damage_ratio = 1.0; double life_ratio = 1.0;
+        double speed_ratio = 2.0; double range_ratio = 0.7; double damage_ratio = 1.0; double life_ratio = 1.0;
         double leach_ratio = 1.0; double physical_defense_ratio = 2.0; double magic_defense_ratio = 3.0;
         double regen_ratio = 4.0; double physical_penetration_ratio = 1.25; double magic_penetration_ratio = 1.75;
         double damage_type_ratio = 3.0;

@@ -39,7 +39,7 @@ public class defender_agent : defender_script
         // base.CollectObservations(sensor);
     }
     protected override void requestAction()    {
-        AddReward(REWARD_ALIVE_PER_TICK);
+        // AddReward(REWARD_ALIVE_PER_TICK);
         RequestDecision();
     }
     protected override void take_action(int action) {
@@ -128,7 +128,7 @@ public class defender_agent : defender_script
 
     public void game_over() {
         // print("Reward");
-        AddReward(-1.0f);
+        // AddReward(-1.0f);
         EndEpisode();
     }
 }

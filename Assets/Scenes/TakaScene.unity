@@ -4773,19 +4773,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7192765395554730985, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: a4387cb984169704d86b14a886983bfa, type: 3}
+      objectReference: {fileID: 5022602860645237092, guid: 3d3fb6a338ab563458f270f97e89b0cf, type: 3}
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_BehaviorName
       value: defender_tower
       objectReference: {fileID: 0}
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
+      propertyPath: m_BehaviorType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_BrainParameters.VectorObservationSize
-      value: 40
+      value: 126
       objectReference: {fileID: 0}
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_BrainParameters.VectorActionSize.Array.data[0]
@@ -4873,7 +4877,7 @@ MonoBehaviour:
   x: 0
   z: 1
   life: 0
-  attacker: {fileID: 1153108766704124706}
+  attacker: {fileID: 1153108766704124700}
 --- !u!114 &254270809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19218,7 +19222,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1103409005}
-  - component: {fileID: 1103409004}
+  - component: {fileID: 1103409006}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -19226,20 +19230,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1103409004
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1103409003}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53df4e31048ca8549ac5a3c824afb25a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  defenders: []
-  attacker: {fileID: 1153108766704124706}
 --- !u!4 &1103409005
 Transform:
   m_ObjectHideFlags: 0
@@ -19255,6 +19245,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1103409006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1103409003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 579b8601be2e9e849a3f111594cb1593, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defenders: []
+  attacker: {fileID: 1153108766704124700}
+  trainDefenders: 0
 --- !u!1 &1111630615
 GameObject:
   m_ObjectHideFlags: 0
@@ -20962,10 +20967,14 @@ PrefabInstance:
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5022602860645237092, guid: 3d3fb6a338ab563458f270f97e89b0cf, type: 3}
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_BehaviorName
       value: defender_tower
+      objectReference: {fileID: 0}
+    - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
+      propertyPath: m_BehaviorType
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_BrainParameters.VectorObservationSize
@@ -21057,7 +21066,7 @@ MonoBehaviour:
   x: 0
   z: 3
   life: 0
-  attacker: {fileID: 1153108766704124706}
+  attacker: {fileID: 1153108766704124700}
 --- !u!114 &1201520263
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22043,19 +22052,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7192765395554730985, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: a4387cb984169704d86b14a886983bfa, type: 3}
+      objectReference: {fileID: 5022602860645237092, guid: 3d3fb6a338ab563458f270f97e89b0cf, type: 3}
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_BehaviorName
       value: defender_tower
       objectReference: {fileID: 0}
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
+      propertyPath: m_BehaviorType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_BrainParameters.VectorObservationSize
-      value: 40
+      value: 126
       objectReference: {fileID: 0}
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_BrainParameters.VectorActionSize.Array.data[0]
@@ -22143,7 +22156,7 @@ MonoBehaviour:
   x: 0
   z: 0
   life: 0
-  attacker: {fileID: 1153108766704124706}
+  attacker: {fileID: 1153108766704124700}
 --- !u!114 &1297335242
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29254,19 +29267,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7192765395554730985, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: a4387cb984169704d86b14a886983bfa, type: 3}
+      objectReference: {fileID: 5022602860645237092, guid: 3d3fb6a338ab563458f270f97e89b0cf, type: 3}
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_BehaviorName
       value: defender_tower
       objectReference: {fileID: 0}
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
+      propertyPath: m_BehaviorType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_BrainParameters.VectorObservationSize
-      value: 40
+      value: 126
       objectReference: {fileID: 0}
     - target: {fileID: 8372346469365947886, guid: 6b39927490b190247bdc68ad23496166, type: 3}
       propertyPath: m_BrainParameters.VectorActionSize.Array.data[0]
@@ -29354,7 +29371,7 @@ MonoBehaviour:
   x: 2
   z: 2
   life: 0
-  attacker: {fileID: 1153108766704124706}
+  attacker: {fileID: 1153108766704124700}
 --- !u!114 &1825106579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32842,6 +32859,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 355262143137313870, guid: 774c045fd7ea503429b93d4211047712, type: 3}
+      propertyPath: m_BrainParameters.VectorObservationSize
+      value: 254
+      objectReference: {fileID: 0}
     - target: {fileID: 1512344214559543404, guid: 774c045fd7ea503429b93d4211047712, type: 3}
       propertyPath: m_Name
       value: attacker
@@ -32901,6 +32922,9 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1512344214559543404, guid: 774c045fd7ea503429b93d4211047712, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 1153108766704124700}
+    - targetCorrespondingSourceObject: {fileID: 1512344214559543404, guid: 774c045fd7ea503429b93d4211047712, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 1153108766704124706}
   m_SourcePrefab: {fileID: 100100000, guid: 774c045fd7ea503429b93d4211047712, type: 3}
 --- !u!1 &1153108766704124699 stripped
@@ -32908,6 +32932,23 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1512344214559543404, guid: 774c045fd7ea503429b93d4211047712, type: 3}
   m_PrefabInstance: {fileID: 1153108766704124698}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1153108766704124700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1153108766704124699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91c78129420460b47be7cc62c5a2763c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
+  Unborn_Spawn: {fileID: 8044181977783920916, guid: e879a048541c5a4409a3b1d734f97f8e, type: 3}
 --- !u!114 &1153108766704124706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32917,14 +32958,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1153108766704124699}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a0d59068169e324eb36402874dbc260, type: 3}
+  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agentParameters:
-    maxStep: 0
-  hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
-  Unborn_Spawn: {fileID: 8044181977783920916, guid: e879a048541c5a4409a3b1d734f97f8e, type: 3}
+  DecisionPeriod: 5
+  TakeActionsBetweenDecisions: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

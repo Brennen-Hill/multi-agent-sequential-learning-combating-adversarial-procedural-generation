@@ -17,7 +17,8 @@ public class attacker_agent : attacker_script
     public override void CollectObservations(VectorSensor sensor)
     {
         const int maxSpawns = 16;
-        int expected_size = 2 + 4*3 + maxSpawns*15; // 254
+        const int maxDefenders = 4;
+        int expected_size = 2 + maxDefenders*3 + maxSpawns*15; // 254
 
         sensor.AddObservation(energy);
         sensor.AddObservation(max_energy);
@@ -54,10 +55,11 @@ public class attacker_agent : attacker_script
             sensor.AddObservation(spawn.magic_penetration);
         }
 
-        while (sensor.ObservationSize() <= expected_size)
-        {
+        int current_size = 2 + maxDefenders*3 + 15*howManySpawns;
+        int space_left = expected_size - current_size;
+        for(int i = 0; i < space_left; i++) {
             sensor.AddObservation(-1);
-        }        
+        }    
     }
     /*
         actions.DiscreteActions format:
@@ -91,12 +93,12 @@ public class attacker_agent : attacker_script
             }
 
             bool spawn_success = spawn(traits);
-            if(!spawn_success) AddReward(-1.0f);
+            if(!spawn_success) AddReward(-.01f);
         }
     }
 
     public void game_over() {
-        AddReward(1.0f);
+        AddReward(20.0f);
         EndEpisode();
     }
 }
