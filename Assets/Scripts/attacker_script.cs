@@ -14,6 +14,7 @@ public class attacker_script : Agent
     protected int max_energy;
     protected int energy;
     private const int energy_refill_rate = 20;
+
     private const int max_energy_rate = 1;
     protected List<defender_script> defenders;
 
@@ -27,6 +28,7 @@ public class attacker_script : Agent
        GameTicker.instance.BoardTick.AddListener(OnBoardTick);
         defenders = new List<defender_script>(FindObjectsOfType<defender_script>());
        initialize();
+
     }
 
     // Will be called once every game tick/turn

@@ -8,12 +8,13 @@ public class GameManager : MonoBehaviour
     public defender_agent[] defenders;
     public attacker_script attacker;
     public bool trainDefenders = true;
+
     // Start is called before the first frame update
     private ArrayList spawns = new ArrayList();
     void Start()
     {
         defenders = FindObjectsOfType<defender_agent>();
-        attacker = FindObjectOfType<attacker_script>();
+        attacker = FindObjectOfType<attacker_agent>();
     }
 
     // Update is called once per frame
@@ -31,6 +32,7 @@ public class GameManager : MonoBehaviour
                 defender.game_over();
             }
             // attacker.game_over();
+
         }
     }
 

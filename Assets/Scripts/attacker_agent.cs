@@ -20,6 +20,7 @@ public class attacker_agent : attacker_script
         const int maxDefenders = 4;
         int expected_size = 2 + maxDefenders*3 + maxSpawns*15; // 254
 
+
         sensor.AddObservation(energy);
         sensor.AddObservation(max_energy);
 
@@ -60,6 +61,7 @@ public class attacker_agent : attacker_script
         for(int i = 0; i < space_left; i++) {
             sensor.AddObservation(-1);
         }    
+
     }
     /*
         actions.DiscreteActions format:
@@ -93,12 +95,16 @@ public class attacker_agent : attacker_script
             }
 
             bool spawn_success = spawn(traits);
+
             if(!spawn_success) AddReward(-.01f);
+
         }
     }
 
     public void game_over() {
+
         AddReward(20.0f);
+
         EndEpisode();
     }
 }

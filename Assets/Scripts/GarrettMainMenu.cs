@@ -7,7 +7,7 @@ public class menuscript : MonoBehaviour
 {
     public void PlayGame()
     {
-        SceneManager.LoadScene("Garrett-TakaScene");
+        SceneManager.LoadScene("TakaScene");
 
     }
     public void QuitGame()
