@@ -1,3 +1,5 @@
+# multi-agent sequential learning combating adversarial proceduralgeneration
+
 We were inspired by the game plants versus zombies. We built a board with ten lanes, each 30 tiles long.
 
 Four defenders were located on the first through fourth tiles. Each tick, each defender can move left, move right, shoot, heal, use a special ability, or do nothing. Each defender has an amount of energy they can spend on actions, which replenishes over time up to a maximum.
