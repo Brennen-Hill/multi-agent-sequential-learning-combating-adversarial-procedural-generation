@@ -1,4 +1,4 @@
-# multi-agent sequential learning combating adversarial proceduralgeneration
+# multi-agent sequential learning combating adversarial procedural generation
 
 We were inspired by the game plants versus zombies. We built a board with ten lanes, each 30 tiles long.
 
